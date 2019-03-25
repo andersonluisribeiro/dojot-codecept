@@ -4,7 +4,23 @@ exports.config = {
   helpers: {
     Puppeteer: {
       url: 'http://localhost:8000',
-      show: true
+      keepBrowserState: true,
+      keepCookies: true,
+      fullPageScreenshots: true,
+      restart: true,
+      keepBrowserState: true,
+      show: true,
+      waitForNavigation: ['networkidle2', 'domcontentloaded'],
+      waitForAction: 500,
+      chrome: {
+        args: ['--no-sandbox', '--start-maximized'],
+        handleSIGTERM: false,
+        handleSIGHUP: false,
+        defaultViewport: {
+          width: 1920,
+          height: 1080
+        },
+      },
     }
   },
   include: {
