@@ -17,8 +17,8 @@ exports.config = {
         handleSIGTERM: false,
         handleSIGHUP: false,
         defaultViewport: {
-          width: 1920,
-          height: 1080
+          width: 800,
+          height: 600
         },
       },
     }
@@ -29,7 +29,7 @@ exports.config = {
   plugins: {
     autoLogin: {
       enabled: true,
-      saveToFile: true,
+      saveToFile: false,
       inject: 'login',
       users: {
         admin: {
