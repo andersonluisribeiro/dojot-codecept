@@ -1,12 +1,11 @@
 
 Feature('Template creation');
 
+Before(login => {
+    login('admin');
+});
+
 Scenario('Creating a simple template', async (I) => {
-    I.amOnPage('http://localhost:8000');
-    I.see('Sign in');
-    I.fillField('Username', 'admin');
-    I.fillField('Password', 'admin');
-    I.click('Login');
     I.click('Templates');
     I.click(locate('div').withAttr({ title: 'Create a new template' }));
     I.fillField('Template Name', 'Custom template');

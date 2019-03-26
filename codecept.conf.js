@@ -26,6 +26,28 @@ exports.config = {
   include: {
     I: './steps_file.js'
   },
+  plugins: {
+    autoLogin: {
+      enabled: true,
+      saveToFile: true,
+      inject: 'login',
+      users: {
+        admin: {
+          login: (I) => {
+            I.amOnPage('http://localhost:8000');
+            I.see('Sign in');
+            I.fillField('Username', 'admin');
+            I.fillField('Password', 'admin');
+            I.click('Login');
+          },
+          check: (I) => {
+            I.amOnPage('http://localhost:8000');
+            I.see('Sign in');
+          }
+        }
+      }
+    }
+  },
   bootstrap: null,
   mocha: {},
   name: 'dojot-codecept'
