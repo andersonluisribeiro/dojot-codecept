@@ -1,5 +1,5 @@
 const I = actor();
-const Util = require('./Utils');
+const Util = require('../Utils');
 module.exports = {
 
     /*    // setting locators
@@ -15,7 +15,6 @@ module.exports = {
             I.fillField(this.fields.password, password);
             I.click(this.submitButton);
         }*/
-
     AttributeType: {
         dynamic: 'Dynamic Value',
         static: 'Static Value',
@@ -27,6 +26,12 @@ module.exports = {
         float: 'Float',
         integer: 'Integer',
         string: 'String',
+    },
+    ConfigurationType: {
+        protocol: 'Protocol',
+        topic: 'Topic',
+        translator: 'Translator',
+        device_timeout: 'Device Timeout',
     },
     clickOpenTemplatePage() {
         I.click(locate('a').withAttr({href: '#/template/list'}));
@@ -45,7 +50,7 @@ module.exports = {
             value
         }
     },
-    addMetaTemplate(labelValue, typeValue, attrValueType, value) {
+    addMeta(labelValue, typeValue, attrValueType, value) {
         console.log('addMetaTemplate', labelValue, typeValue, attrValueType, value);
         I.click(locate('.body-actions--button div').withText('New Metadata'));
         within('.sidebar-metadata', () => {
@@ -56,7 +61,7 @@ module.exports = {
             I.click('Add');
         });
     },
-    addAttrTemplate(fieldValue, attrType, attrValueType, metaDataArray, value = '') {
+    addAttr(fieldValue, attrType, attrValueType, metaDataArray, value = '') {
         console.log('addAttrTemplate');
         I.click(locate('.body-actions--button div').withText('New Attribute'));
         within('.sidebar-attribute', () => {
@@ -70,10 +75,19 @@ module.exports = {
         });
 
         metaDataArray.forEach((meta) => {
-            this.addMetaTemplate(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
+            this.addMeta(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
         });
 
         within('.sidebar-attribute', () => {
+            I.click('Add');
+        });
+    },
+    addConfigTemplate(confType, value) {
+        console.log('addAttrTemplate');
+        I.click(locate('.body-actions--button div').withText('New Configuration'));
+        within('.sidebar-attribute', () => {
+            I.selectOption(locate('select').withAttr({name: 'label'}), confType);
+            I.fillField('static_value', value);
             I.click('Add');
         });
     },

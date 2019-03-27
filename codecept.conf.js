@@ -1,5 +1,5 @@
 exports.config = {
-  tests: './*_test.js',
+  tests: './Scenarios/*_test.js',
     output: './output',
     helpers: {
         Puppeteer: {
@@ -25,7 +25,7 @@ exports.config = {
     },
     include: {
         I: './steps_file.js',
-        Template: "./template_file.js",
+        Template: "./PageObject/Template.js",
     },
     plugins: {
         autoLogin: {
@@ -52,4 +52,4 @@ exports.config = {
     bootstrap: null,
     mocha: {},
     name: 'dojot-codecept'
-}
+};
