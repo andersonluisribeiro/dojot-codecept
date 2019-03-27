@@ -1,25 +1,75 @@
-/*import  attrTest from 'Types';*/
-const { attrType, attrValueType } = require('./Types');
-
 Feature('Template creation');
 
 Before(login => {
     login('admin');
 });
 
-Scenario('Creating a simple template', async (I) => {
-    I.click(locate('a').withAttr({ href: '#/template/list' }));
-    I.click(locate('div').withAttr({ title: 'Create a new template' }));
-    I.fillField('Template Name', 'Temp1');
+Scenario('Creating a simple template', async (I, Template) => {
+    Template.clickOpenTemplatePage();
+    Template.clickCreateNew();
+    Template.fillNameTemplate('Temp1');
+    Template.addAttrTemplate(
+        'text',
+        Template.AttributeType.static,
+        Template.AttributeValueType.string,
+        [
+            Template.setMeta('labelMeta1',
+                'typeValueMeta1',
+                Template.AttributeValueType.string,
+                'valueMeta1')
+        ],
+        'value of text');
 
-/*    I.addAttrTemplate('int', attrType.dynamic, attrValueType.integer);
-    I.addAttrTemplate('bool', attrType.dynamic, attrValueType.boolean);
-    I.addAttrTemplate('number', attrType.dynamic, attrValueType.float);
-    I.addAttrTemplate('gps', attrType.dynamic, attrValueType.geo);
-    I.addAttrTemplate('text', attrType.dynamic, attrValueType.string);*/
+    Template.addAttrTemplate(
+        'int',
+        Template.AttributeType.dynamic,
+        Template.AttributeValueType.integer,
+        [
+            Template.setMeta('labelMeta1',
+                'typeValueMeta1',
+                Template.AttributeValueType.float,
+                3.5)
+        ]);
 
-    I.addAttrTemplate('text', attrType.static, attrValueType.string, 'value of text');
+    Template.addAttrTemplate(
+        'bool',
+        Template.AttributeType.static,
+        Template.AttributeValueType.boolean,
+        [
+            Template.setMeta('labelMeta2',
+                'typeValueMeta2',
+                Template.AttributeValueType.boolean,
+                false),
 
-    I.click('Save');
-    I.see('Template created.');
+        ],
+        true);
+
+    Template.addAttrTemplate(
+        'gps',
+        Template.AttributeType.static,
+        Template.AttributeValueType.geo,
+        [
+            Template.setMeta('labelMeta2',
+                'typeValueMeta2',
+                Template.AttributeValueType.integer,
+                55),
+
+        ],
+        '-22.826702502573774, -47.044628078647314');
+
+    Template.addAttrTemplate(
+        'float',
+        Template.AttributeType.static,
+        Template.AttributeValueType.float,
+        [
+            Template.setMeta('labelMeta2',
+                'typeValueMeta2',
+                Template.AttributeValueType.geo,
+                '-11.2, -22'),
+
+        ],
+        5.5545);
+
+    Template.clickSave();
+    Template.seeTemplateHasCreated();
 });
