@@ -24,13 +24,8 @@ module.exports = {
 
     async connectFlows(){
         let ids = await I.grabAttributeFrom('.nodegroup', 'id');
-        let news = ids.map(id => id.split('.')[0]);
-        console.log(news);
-        console.log(`#${news[0]}`);
-
-        I.dragAndDrop(locate(`.port_output`).inside(`#${news[0]}`), locate(`.port_input`).inside(`#${news[1]}`));
-        // I.dragAndDrop(locate(`.port_output`).at(1), locate(`.port_input`).at(1));
-        // I.dragAndDrop(locate(`.port_output`).at(2), locate(`.port_input`).at(2));
+        I.dragAndDrop(locate(`.port_output`).inside(`#${ids[0]}`), locate(`.port_input`).inside(`#${ids[1]}`));
+        I.dragAndDrop(locate(`.port_output`).inside(`#${ids[1]}`), locate(`.port_input`).inside(`#${ids[2]}`));
     }
 
 }
