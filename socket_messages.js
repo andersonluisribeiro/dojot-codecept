@@ -1,13 +1,13 @@
 var mqtt = require('async-mqtt')
 var request = require('sync-request');
 
-Feature('Realtime message');
+Feature('Watch socket messages');
 
 Before(login => {
     login('admin');
 });
 
-Scenario('Sending a simple message', async (I) => {
+Scenario('Watching a simple message', async (I) => {
     let jwt = await I.executeScript(() => { return localStorage.getItem('jwt')});
 
     let templateCreation = request('POST', 'http://127.0.0.1:8000/template', {
