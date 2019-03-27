@@ -10,7 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "codeceptjs": "^2.0.8",
-    "puppeteer": "^1.13.0"
+    "puppeteer": "^1.13.0",
+    "sync-request": "^6.1.0"
   },
   "dependencies": {
     "async-mqtt": "^2.2.1",
