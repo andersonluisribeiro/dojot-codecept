@@ -8,7 +8,13 @@ Scenario('Creating a simple template', async (I, Template) => {
     Template.clickOpenTemplatePage();
     Template.clickCreateNew();
     Template.fillNameTemplate('Temp1');
-    Template.addAttrTemplate(
+
+    Template.addConfigTemplate(
+        Template.ConfigurationType.protocol,
+        'mqtt'
+    );
+
+    Template.addAttr(
         'text',
         Template.AttributeType.static,
         Template.AttributeValueType.string,
@@ -18,9 +24,10 @@ Scenario('Creating a simple template', async (I, Template) => {
                 Template.AttributeValueType.string,
                 'valueMeta1')
         ],
-        'value of text');
+        'value of text'
+    );
 
-    Template.addAttrTemplate(
+    Template.addAttr(
         'int',
         Template.AttributeType.dynamic,
         Template.AttributeValueType.integer,
@@ -29,9 +36,10 @@ Scenario('Creating a simple template', async (I, Template) => {
                 'typeValueMeta1',
                 Template.AttributeValueType.float,
                 3.5)
-        ]);
+        ]
+    );
 
-    Template.addAttrTemplate(
+    Template.addAttr(
         'bool',
         Template.AttributeType.static,
         Template.AttributeValueType.boolean,
@@ -42,9 +50,10 @@ Scenario('Creating a simple template', async (I, Template) => {
                 false),
 
         ],
-        true);
+        true
+    );
 
-    Template.addAttrTemplate(
+    Template.addAttr(
         'gps',
         Template.AttributeType.static,
         Template.AttributeValueType.geo,
@@ -55,9 +64,10 @@ Scenario('Creating a simple template', async (I, Template) => {
                 55),
 
         ],
-        '-22.826702502573774, -47.044628078647314');
+        '-22.826702502573774, -47.044628078647314'
+    );
 
-    Template.addAttrTemplate(
+    Template.addAttr(
         'float',
         Template.AttributeType.static,
         Template.AttributeValueType.float,
@@ -68,7 +78,8 @@ Scenario('Creating a simple template', async (I, Template) => {
                 '-11.2, -22'),
 
         ],
-        5.5545);
+        5.5545
+    );
 
     Template.clickSave();
     Template.seeTemplateHasCreated();
