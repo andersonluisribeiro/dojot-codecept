@@ -4,12 +4,11 @@ exports.config = {
     helpers: {
         Puppeteer: {
             url: 'http://localhost:8000',
-            keepBrowserState: true,
             keepCookies: true,
             fullPageScreenshots: true,
-            restart: true,
+            restart: false,
             keepBrowserState: true,
-            show: true,
+            show: false,
             waitForNavigation: ['networkidle2', 'domcontentloaded'],
             waitForAction: 500,
             chrome: {
@@ -17,8 +16,8 @@ exports.config = {
                 handleSIGTERM: false,
                 handleSIGHUP: false,
                 defaultViewport: {
-                    width: 800,
-                    height: 600
+                    width: 1700,
+                    height: 1080
                 },
             },
         }
@@ -26,6 +25,7 @@ exports.config = {
     include: {
         I: './steps_file.js',
         Template: "./PageObject/Template.js",
+        FlowPage: './PageObject/Flow.js'
     },
     plugins: {
         autoLogin: {
