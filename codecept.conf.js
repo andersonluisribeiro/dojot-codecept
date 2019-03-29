@@ -38,6 +38,7 @@ exports.config = {
                 admin: {
                     login: (I) => {
                         I.amOnPage('http://10.202.21.25:8000');
+                        I.wait(1);
                         I.see('Sign in');
                         I.fillField('Username', 'admin');
                         I.fillField('Password', 'admin');
