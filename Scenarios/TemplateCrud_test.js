@@ -122,16 +122,18 @@ Scenario('Updating a template', async (I, Template) => {
     Template.fillNameTemplate('Temp2');
     Template.updateAttr(
         'text',
+        'textNew',
         Template.AttributeType.static,
-        Template.AttributeValueType.string,
+        Template.AttributeValueType.integer,
         [
-            Template.convertToObjectMeta(
+            Template.convertToObjectMetaToUpdate(
                 'labelMeta1',
-                'typeValueMeta1',
-                Template.AttributeValueType.string,
-                'valueMeta1')
+                'labelMeta2',
+                'typeValueMeta2',
+                Template.AttributeValueType.boolean,
+                false)
         ],
-        'value of text'
+        10
     );
     Template.seeManageFirmware();
     Template.clickSave();
@@ -143,15 +145,10 @@ Scenario('Removing template', async (I, Template) => {
     Template.clickOpenTemplatePage();
     Template.clickCardByNameTemplate('Temp2');
     Template.seeNameTemplate('Temp2');
-    Template.removeAttr('text', Template.AttributeType.static, Template.AttributeValueType.string, [
-        Template.convertToObjectMeta('labelMeta1',
-            'typeValueMeta1',
-            Template.AttributeValueType.string,
-            'valueMeta1')
+    Template.removeAttr('textNew', [
+        'labelMeta2'
     ]);
-
     Template.removeConfigTemplate(Template.ConfigurationType.protocol);
-
     Template.removeTemplate();
     Template.seeTemplateHasDelete();
 });

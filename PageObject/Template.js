@@ -2,14 +2,14 @@ let I = actor();
 const Util = require('../Utils');
 
 module.exports = {
-    FieldsLabel:{},
+    FieldsLabel: {},
     ButtonLabel: {
         add: 'Add',
         remove: 'Remove',
         save: 'Save',
         discard: 'Discard'
     },
-    ClassesCSS:{},
+    ClassesCSS: {},
     AttributeType: {
         dynamic: 'Dynamic Value',
         static: 'Static Value',
@@ -31,7 +31,7 @@ module.exports = {
     init(i) {
         I = i;
     },
-    convertToObjectMeta: (labelValue, typeValue, attrValueType, value) => {
+    convertToObjectMeta: function (labelValue, typeValue, attrValueType, value) {
         return {
             labelValue,
             typeValue,
@@ -39,19 +39,22 @@ module.exports = {
             value
         }
     },
-    clickOpenTemplatePage: function() {
+    convertToObjectMetaToUpdate: function (oldLabelValue, newLabelValue, newTypeValue, newAttrValueType, newValue) {
+        return {oldLabelValue, ...this.convertToObjectMeta(newLabelValue, newTypeValue, newAttrValueType, newValue)};
+    },
+    clickOpenTemplatePage: function () {
         I.click(locate('a').withAttr({href: '#/template/list'}));
     },
-    fillNameTemplate: function(value) {
+    fillNameTemplate: function (value) {
         I.fillField('Template Name', value);
     },
-    seeNameTemplate: function(value) {
+    seeNameTemplate: function (value) {
         I.seeInputByNameAndValue('Template Name', value);
     },
-    clickCreateNew: function() {
+    clickCreateNew: function () {
         I.click(locate('div').withAttr({title: 'Create a new template'}));
     },
-    clickCardByNameTemplate: function(nameTemplate) {
+    clickCardByNameTemplate: function (nameTemplate) {
         I.click(locate('.template-card  label').withAttr({title: nameTemplate}));
     },
     _fillAttrForm: function (fieldValue, attrType, attrValueType, value) {
@@ -77,9 +80,9 @@ module.exports = {
         this._fillMetaForm(labelValue, typeValue, attrValueType, value);
         I.click(this.ButtonLabel.add);
     },
-    _updateMeta: function (labelValue, typeValue, attrValueType, value) {
-        this._clickToEditAMeta(labelValue);
-        this._fillMetaForm(labelValue, typeValue, attrValueType, value);
+    _updateMeta: function (oldLabelValue, newLabelValue, newTypeValue, newAttrValueType, newValue) {
+        this._clickToEditAMeta(oldLabelValue);
+        this._fillMetaForm(newLabelValue, newTypeValue, newAttrValueType, newValue);
         I.click(this.ButtonLabel.save);
     },
     addAttr: function (fieldValue, attrType, attrValueType, metaDataArray, value = '') {
@@ -92,11 +95,15 @@ module.exports = {
             I.click(this.ButtonLabel.add);
         });
     },
-    updateAttr: function (fieldValue, attrType, attrValueType, metaDataArray, value = '') {
-        this._clickToEditAAttr(fieldValue);
-        this._fillAttrForm(fieldValue, attrType, attrValueType, value);
+    updateAttr: function (oldFieldValue, newFieldValue, newAttrType, newAttrValueType, metaDataArray, newValue = '') {
+        this._clickToEditAAttr(oldFieldValue);
+        this._fillAttrForm(newFieldValue, newAttrType, newAttrValueType, newValue);
         metaDataArray.forEach((meta) => {
-            this._updateMeta(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
+            if (meta.oldLabelValue) {
+                this._updateMeta(meta.oldLabelValue, meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
+            } else {
+                this._addMeta(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
+            }
         });
         within('.sidebar-attribute', () => {
             I.click(this.ButtonLabel.save);
@@ -115,7 +122,7 @@ module.exports = {
             I.click(this.ButtonLabel.discard);
         });
     },
-    seeAttr: function(fieldValue, attrType, attrValueType, metaDataArray, value = null) {
+    seeAttr: function (fieldValue, attrType, attrValueType, metaDataArray, value = null) {
         this._clickToEditAAttr(fieldValue);
         within('.sidebar-attribute', () => {
             I.seeInputByNameAndValue('label', fieldValue);
@@ -149,13 +156,13 @@ module.exports = {
     _clickToEditAAttr: function (label) {
         I.click(locate('.template-prop').withAttr({title: label, role: 'button'}));
     },
-    removeAttr: function(fieldValue, attrType, attrValueType, metaDataArray) {
+    removeAttr: function (fieldValue, metasToRemove) {
         this._clickToEditAAttr(fieldValue);
         within('.sidebar-attribute', () => {
             I.seeInputByNameAndValue('label', fieldValue);
         });
-        metaDataArray.forEach((meta) => {
-            this._removeMeta(meta.labelValue);
+        metasToRemove.forEach((meta) => {
+            this._removeMeta(meta);
         });
         within('.sidebar-attribute', () => {
             I.click(this.ButtonLabel.remove);
@@ -168,12 +175,12 @@ module.exports = {
             I.fillField('static_value', value);
         });
     },
-    addConfigTemplate: function(confType, value) {
+    addConfigTemplate: function (confType, value) {
         I.click(locate('.body-actions--button div').withText('New Configuration'));
         this._fillConfigForm(confType, value);
         I.click(this.ButtonLabel.add);
     },
-    seeConfigTemplate: function(confType, value) {
+    seeConfigTemplate: function (confType, value) {
         I.click(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
         within('.sidebar-attribute', () => {
             I.seeSelectOptionByNameAndValue('label', confType);
@@ -181,7 +188,7 @@ module.exports = {
             I.click(this.ButtonLabel.discard);
         });
     },
-    removeConfigTemplate: function(confType) {
+    removeConfigTemplate: function (confType) {
         I.click(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
         within('.sidebar-attribute', () => {
             I.seeSelectOptionByNameAndValue('label', confType);
@@ -190,28 +197,28 @@ module.exports = {
         });
         I.click('Confirm');
     },
-    seeManageFirmware: function() {
+    seeManageFirmware: function () {
         I.click(locate('.body-actions--button div').withText('Manage Firmware'));
         I.click(locate('.firmware-enabled'));
         I.click(this.ButtonLabel.discard);
     },
-    clickSave: function() {
+    clickSave: function () {
         I.click(this.ButtonLabel.save);
     },
-    clickDiscard: function() {
+    clickDiscard: function () {
         I.click(this.ButtonLabel.discard);
     },
-    seeTemplateHasCreated: function() {
+    seeTemplateHasCreated: function () {
         I.see('Template created.');
     },
-    removeTemplate: function() {
+    removeTemplate: function () {
         I.click(this.ButtonLabel.remove);
         I.click('Confirm');
     },
-    seeTemplateHasDelete: function() {
+    seeTemplateHasDelete: function () {
         I.see('Template removed.');
     },
-    seeTemplateHasUpdated: function() {
+    seeTemplateHasUpdated: function () {
         I.see('Template updated.');
     },
 };
