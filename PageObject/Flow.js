@@ -8,6 +8,7 @@ module.exports = {
 
     clickCreateNew() {
         I.click(locate('a').withAttr({href: '#/flows/new'}));
+        I.wait(1);
     },
 
     addDeviceToFlow(){
