@@ -2,7 +2,9 @@ var mqtt = require('async-mqtt')
 var request = require('sync-request');
 var env = require('./env.conf');
 
-module.exports = function () {
+module.exports = () => {
+    var jwt;
+
     return actor({
 
         seeInputByNameAndValue: function (name, value) {
@@ -18,7 +20,9 @@ module.exports = function () {
         },
 
         async postJSON(resource, myJson){ 
-            let jwt = await this.executeScript(() => { return localStorage.getItem('jwt')});
+            if(!jwt){
+                jwt = await this.executeScript(() => { return localStorage.getItem('jwt')});
+            }
 
             let response = request('POST', `${env.dojot_host}/${resource}`, {
                 headers: {
