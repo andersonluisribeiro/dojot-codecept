@@ -31,7 +31,7 @@ module.exports = {
     init(i) {
         I = i;
     },
-    convertToObjectMeta: function (labelValue, typeValue, attrValueType, value) {
+    convertToObjectMetaToAdd: function (labelValue, typeValue, attrValueType, value) {
         return {
             labelValue,
             typeValue,
@@ -40,7 +40,10 @@ module.exports = {
         }
     },
     convertToObjectMetaToUpdate: function (oldLabelValue, newLabelValue, newTypeValue, newAttrValueType, newValue) {
-        return {oldLabelValue, ...this.convertToObjectMeta(newLabelValue, newTypeValue, newAttrValueType, newValue)};
+        return {oldLabelValue, ...this.convertToObjectMetaToAdd(newLabelValue, newTypeValue, newAttrValueType, newValue)};
+    },
+    convertToObjectMetaToRemove: function (removeLabelValue) {
+        return {removeLabelValue};
     },
     clickOpenTemplatePage: function () {
         I.click(locate('a').withAttr({href: '#/template/list'}));
@@ -101,7 +104,9 @@ module.exports = {
         metaDataArray.forEach((meta) => {
             if (meta.oldLabelValue) {
                 this._updateMeta(meta.oldLabelValue, meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
-            } else {
+            } else if (meta.removeLabelValue){
+                this._removeMeta(meta.removeLabelValue);
+            }else{
                 this._addMeta(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
             }
         });
@@ -162,7 +167,7 @@ module.exports = {
             I.seeInputByNameAndValue('label', fieldValue);
         });
         metasToRemove.forEach((meta) => {
-            this._removeMeta(meta);
+            this._removeMeta(meta.removeLabelValue);
         });
         within('.sidebar-attribute', () => {
             I.click(this.ButtonLabel.remove);

@@ -8,7 +8,7 @@ Scenario('Creating a template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
     Template.clickCreateNew();
-    Template.fillNameTemplate('Temp1');
+    Template.fillNameTemplate('ATemp1');
 
     Template.addConfigTemplate(
         Template.ConfigurationType.protocol,
@@ -20,7 +20,7 @@ Scenario('Creating a template', async (I, Template) => {
         Template.AttributeType.static,
         Template.AttributeValueType.string,
         [
-            Template.convertToObjectMeta('labelMeta1',
+            Template.convertToObjectMetaToAdd('labelMeta1',
                 'typeValueMeta1',
                 Template.AttributeValueType.string,
                 'valueMeta1')
@@ -34,7 +34,7 @@ Scenario('Creating a template', async (I, Template) => {
         Template.AttributeType.dynamic,
         Template.AttributeValueType.integer,
         [
-            Template.convertToObjectMeta('labelMeta1',
+            Template.convertToObjectMetaToAdd('labelMeta1',
                 'typeValueMeta1',
                 Template.AttributeValueType.float,
                 3.5)
@@ -46,7 +46,7 @@ Scenario('Creating a template', async (I, Template) => {
         Template.AttributeType.static,
         Template.AttributeValueType.boolean,
         [
-            Template.convertToObjectMeta('labelMeta2',
+            Template.convertToObjectMetaToAdd('labelMeta2',
                 'typeValueMeta2',
                 Template.AttributeValueType.boolean,
                 false),
@@ -60,7 +60,7 @@ Scenario('Creating a template', async (I, Template) => {
         Template.AttributeType.static,
         Template.AttributeValueType.geo,
         [
-            Template.convertToObjectMeta('labelMeta2',
+            Template.convertToObjectMetaToAdd('labelMeta2',
                 'typeValueMeta2',
                 Template.AttributeValueType.integer,
                 55),
@@ -74,7 +74,7 @@ Scenario('Creating a template', async (I, Template) => {
         Template.AttributeType.static,
         Template.AttributeValueType.float,
         [
-            Template.convertToObjectMeta('labelMeta2',
+            Template.convertToObjectMetaToAdd('labelMeta2',
                 'typeValueMeta2',
                 Template.AttributeValueType.geo,
                 '-11.2, -22'),
@@ -90,14 +90,14 @@ Scenario('Creating a template', async (I, Template) => {
 Scenario('Checking create template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
-    Template.clickCardByNameTemplate('Temp1');
-    Template.seeNameTemplate('Temp1');
+    Template.clickCardByNameTemplate('ATemp1');
+    Template.seeNameTemplate('ATemp1');
     Template.seeAttr(
         'text',
         Template.AttributeType.static,
         Template.AttributeValueType.string,
         [
-            Template.convertToObjectMeta('labelMeta1',
+            Template.convertToObjectMetaToAdd('labelMeta1',
                 'typeValueMeta1',
                 Template.AttributeValueType.string,
                 'valueMeta1')
@@ -117,9 +117,9 @@ Scenario('Checking create template', async (I, Template) => {
 Scenario('Updating a template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
-    Template.clickCardByNameTemplate('Temp1');
-    Template.seeNameTemplate('Temp1');
-    Template.fillNameTemplate('Temp2');
+    Template.clickCardByNameTemplate('ATemp1');
+    Template.seeNameTemplate('ATemp1');
+    Template.fillNameTemplate('ATemp2');
     Template.updateAttr(
         'text',
         'textNew',
@@ -135,6 +135,28 @@ Scenario('Updating a template', async (I, Template) => {
         ],
         10
     );
+
+    Template.updateAttr(
+        'bool',
+        'boolNew',
+        Template.AttributeType.static,
+        Template.AttributeValueType.boolean,
+        [
+            Template.convertToObjectMetaToRemove('labelMeta2'),
+            Template.convertToObjectMetaToAdd(
+                'labelMeta1',
+                'Type',
+                Template.AttributeValueType.boolean,
+                false),
+            Template.convertToObjectMetaToUpdate(
+                'labelMeta1',
+                'labelMeta2',
+                'Type2',
+                Template.AttributeValueType.integer,
+                5),
+        ],
+        true
+    );
     Template.seeManageFirmware();
     Template.clickSave();
     Template.seeTemplateHasUpdated();
@@ -143,10 +165,10 @@ Scenario('Updating a template', async (I, Template) => {
 Scenario('Removing template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
-    Template.clickCardByNameTemplate('Temp2');
-    Template.seeNameTemplate('Temp2');
+    Template.clickCardByNameTemplate('ATemp2');
+    Template.seeNameTemplate('ATemp2');
     Template.removeAttr('textNew', [
-        'labelMeta2'
+        Template.convertToObjectMetaToRemove('labelMeta2')
     ]);
     Template.removeConfigTemplate(Template.ConfigurationType.protocol);
     Template.removeTemplate();
