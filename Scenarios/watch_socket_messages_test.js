@@ -1,5 +1,6 @@
 var mqtt = require('async-mqtt')
 var request = require('sync-request');
+var env = require('../env.conf');
 
 Feature('Watch socket messages');
 
@@ -10,7 +11,7 @@ Before(login => {
 Scenario('Watching a simple message', async (I) => {
     let jwt = await I.executeScript(() => { return localStorage.getItem('jwt')});
 
-    let templateCreation = request('POST', 'http://10.202.21.25:8000/template', {
+    let templateCreation = request('POST', `${env.dojot_host}/template`, {
         headers: {
             Authorization: `Bearer ${jwt}`
         },
@@ -28,8 +29,7 @@ Scenario('Watching a simple message', async (I) => {
     
     let templateId = JSON.parse(templateCreation.getBody('utf8'))['template']['id'];
 
-
-    let deviceCreation = request('POST', 'http://10.202.21.25:8000/device', {
+    let deviceCreation = request('POST', `${env.dojot_host}/device`, {
         headers: {
             Authorization: `Bearer ${jwt}`
         },
@@ -45,7 +45,7 @@ Scenario('Watching a simple message', async (I) => {
     
     let deviceId = JSON.parse(deviceCreation.getBody('utf8'))['devices'][0]['id'];
 
-    let client  = mqtt.connect('http://10.202.21.25');
+    let client  = mqtt.connect(env.mqtt_host);
     await client.publish(`/admin/${deviceId}/attrs`, '{"text": "my string"}');
     await client.end();
     I.click(locate('a').withAttr({ href: `#/device/id/${deviceId}/detail` }));

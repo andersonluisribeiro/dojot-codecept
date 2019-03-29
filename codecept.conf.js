@@ -1,9 +1,11 @@
+let env = require('./env.conf');
+
 exports.config = {
   tests: './Scenarios/*_test.js',
     output: './output',
     helpers: {
         Puppeteer: {
-            url: 'http://10.202.21.25:8000',
+            url: env.dojot_host,
             keepCookies: true,
             fullPageScreenshots: true,
             restart: false,
@@ -19,6 +21,9 @@ exports.config = {
                     height: 1080
                 },
             },
+        },
+        REST: {
+            endpoint: env.dojot_host,
         }
     },
     include: {
@@ -38,7 +43,7 @@ exports.config = {
             users: {
                 admin: {
                     login: (I) => {
-                        I.amOnPage('http://10.202.21.25:8000');
+                        I.amOnPage(env.dojot_host);
                         I.wait(1);
                         I.see('Sign in');
                         I.fillField('Username', 'admin');
@@ -46,7 +51,7 @@ exports.config = {
                         I.click('Login');
                     },
                     check: (I) => {
-                        I.amOnPage('http://10.202.21.25:8000/#/');
+                        I.amOnPage(`${env.dojot_host}/#/`);
                         I.see('admin');
                     }
                 }
