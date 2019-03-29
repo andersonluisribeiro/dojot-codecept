@@ -39,23 +39,26 @@ module.exports = {
             value
         }
     },
-    clickOpenTemplatePage() {
+    clickOpenTemplatePage: function() {
         I.click(locate('a').withAttr({href: '#/template/list'}));
     },
-    fillNameTemplate(value) {
+    fillNameTemplate: function(value) {
         I.fillField('Template Name', value);
     },
-    seeNameTemplate(value) {
+    seeNameTemplate: function(value) {
         I.seeInputByNameAndValue('Template Name', value);
     },
-    clickCreateNew() {
+    clickCreateNew: function() {
         I.click(locate('div').withAttr({title: 'Create a new template'}));
+    },
+    clickCardByNameTemplate: function(nameTemplate) {
+        I.click(locate('.template-card  label').withAttr({title: nameTemplate}));
     },
     _fillAttrForm: function (fieldValue, attrType, attrValueType, value) {
         within('.sidebar-attribute', () => {
             I.fillField(locate('input').first(), fieldValue);
-            I.selectOption(locate('select').withAttr({name: 'type'}), attrType);
-            I.selectOption(locate('select').withAttr({name: 'value_type'}), attrValueType);
+            I.fillSelectByName('type', attrType);
+            I.fillSelectByName('value_type', attrValueType);
             if (attrType !== this.AttributeType.dynamic && value) {
                 I.fillField(locate('input').withAttr({name: 'static_value'}), Util.toString(value));
             }
@@ -65,7 +68,7 @@ module.exports = {
         within('.sidebar-metadata', () => {
             I.fillField('label', labelValue);
             I.fillField('type', typeValue);
-            I.selectOption(locate('select').withAttr({name: 'value_type'}), attrValueType);
+            I.fillSelectByName('value_type', attrValueType);
             I.fillField('static_value', Util.toString(value));
         });
     },
@@ -112,7 +115,7 @@ module.exports = {
             I.click(this.ButtonLabel.discard);
         });
     },
-    seeAttr(fieldValue, attrType, attrValueType, metaDataArray, value = null) {
+    seeAttr: function(fieldValue, attrType, attrValueType, metaDataArray, value = null) {
         this._clickToEditAAttr(fieldValue);
         within('.sidebar-attribute', () => {
             I.seeInputByNameAndValue('label', fieldValue);
@@ -133,7 +136,7 @@ module.exports = {
             I.click(this.ButtonLabel.discard);
         });
     },
-    _removeMeta: function (labelValue, typeValue, attrValueType, value) {
+    _removeMeta: function (labelValue) {
         this._clickToEditAMeta(labelValue);
         within('.sidebar-metadata', () => {
             I.seeInputByNameAndValue('label', labelValue);
@@ -141,19 +144,18 @@ module.exports = {
 
         });
 
-
         I.click('Confirm');
     },
     _clickToEditAAttr: function (label) {
         I.click(locate('.template-prop').withAttr({title: label, role: 'button'}));
     },
-    removeAttr(fieldValue, attrType, attrValueType, metaDataArray, value = null) {
+    removeAttr: function(fieldValue, attrType, attrValueType, metaDataArray) {
         this._clickToEditAAttr(fieldValue);
         within('.sidebar-attribute', () => {
             I.seeInputByNameAndValue('label', fieldValue);
         });
         metaDataArray.forEach((meta) => {
-            this._removeMeta(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
+            this._removeMeta(meta.labelValue);
         });
         within('.sidebar-attribute', () => {
             I.click(this.ButtonLabel.remove);
@@ -162,16 +164,16 @@ module.exports = {
     },
     _fillConfigForm: function (confType, value) {
         within('.sidebar-attribute', () => {
-            I.selectOption(locate('select').withAttr({name: 'label'}), confType);
+            I.fillSelectByName('label', confType);
             I.fillField('static_value', value);
         });
     },
-    addConfigTemplate(confType, value) {
+    addConfigTemplate: function(confType, value) {
         I.click(locate('.body-actions--button div').withText('New Configuration'));
         this._fillConfigForm(confType, value);
         I.click(this.ButtonLabel.add);
     },
-    seeConfigTemplate(confType, value) {
+    seeConfigTemplate: function(confType, value) {
         I.click(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
         within('.sidebar-attribute', () => {
             I.seeSelectOptionByNameAndValue('label', confType);
@@ -179,7 +181,7 @@ module.exports = {
             I.click(this.ButtonLabel.discard);
         });
     },
-    removeConfigTemplate(confType, value) {
+    removeConfigTemplate: function(confType) {
         I.click(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
         within('.sidebar-attribute', () => {
             I.seeSelectOptionByNameAndValue('label', confType);
@@ -188,28 +190,28 @@ module.exports = {
         });
         I.click('Confirm');
     },
-    seeManageFirmware() {
+    seeManageFirmware: function() {
         I.click(locate('.body-actions--button div').withText('Manage Firmware'));
         I.click(locate('.firmware-enabled'));
         I.click(this.ButtonLabel.discard);
     },
-    clickSave() {
+    clickSave: function() {
         I.click(this.ButtonLabel.save);
     },
-    clickDiscard() {
+    clickDiscard: function() {
         I.click(this.ButtonLabel.discard);
     },
-    seeTemplateHasCreated() {
+    seeTemplateHasCreated: function() {
         I.see('Template created.');
     },
-    removeTemplate() {
+    removeTemplate: function() {
         I.click(this.ButtonLabel.remove);
         I.click('Confirm');
     },
-    seeTemplateHasDelete() {
+    seeTemplateHasDelete: function() {
         I.see('Template removed.');
     },
-    seeTemplateHasUpdated() {
+    seeTemplateHasUpdated: function() {
         I.see('Template updated.');
     },
 };

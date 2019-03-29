@@ -6,6 +6,9 @@ module.exports = function () {
         },
         seeSelectOptionByNameAndValue: function (name, value) {
             this.seeElement(locate('select').withAttr({name}), value);
+        },
+        fillSelectByName(name, value){
+            this.selectOption(locate('select').withAttr({name}), value);
         }
     });
 };

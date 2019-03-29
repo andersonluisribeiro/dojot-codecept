@@ -90,7 +90,7 @@ Scenario('Creating a template', async (I, Template) => {
 Scenario('Checking create template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
-    I.click(locate('.template-card  label').withAttr({title: 'Temp1'}));
+    Template.clickCardByNameTemplate('Temp1');
     Template.seeNameTemplate('Temp1');
     Template.seeAttr(
         'text',
@@ -117,7 +117,7 @@ Scenario('Checking create template', async (I, Template) => {
 Scenario('Updating a template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
-    I.click(locate('.template-card  label').withAttr({title: 'Temp1'}));
+    Template.clickCardByNameTemplate('Temp1');
     Template.seeNameTemplate('Temp1');
     Template.fillNameTemplate('Temp2');
     Template.updateAttr(
@@ -141,25 +141,16 @@ Scenario('Updating a template', async (I, Template) => {
 Scenario('Removing template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
-    I.click(locate('.template-card  label').withAttr({title: 'Temp2'}));
+    Template.clickCardByNameTemplate('Temp2');
     Template.seeNameTemplate('Temp2');
-    Template.removeAttr(
-        'text',
-        Template.AttributeType.static,
-        Template.AttributeValueType.string,
-        [
-            Template.convertToObjectMeta('labelMeta1',
-                'typeValueMeta1',
-                Template.AttributeValueType.string,
-                'valueMeta1')
-        ],
-        'value of text'
-    );
+    Template.removeAttr('text', Template.AttributeType.static, Template.AttributeValueType.string, [
+        Template.convertToObjectMeta('labelMeta1',
+            'typeValueMeta1',
+            Template.AttributeValueType.string,
+            'valueMeta1')
+    ]);
 
-    Template.removeConfigTemplate(
-        Template.ConfigurationType.protocol,
-        'mqtt'
-    );
+    Template.removeConfigTemplate(Template.ConfigurationType.protocol);
 
     Template.removeTemplate();
     Template.seeTemplateHasDelete();
