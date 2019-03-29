@@ -3,12 +3,12 @@ exports.config = {
     output: './output',
     helpers: {
         Puppeteer: {
-            url: 'http://localhost:8000',
+            url: 'http://10.202.21.25:8000',
             keepCookies: true,
             fullPageScreenshots: true,
             restart: false,
             keepBrowserState: true,
-            show: false,
+            show: true,
             waitForNavigation: ['networkidle2', 'domcontentloaded'],
             waitForAction: 500,
             chrome: {
@@ -16,7 +16,7 @@ exports.config = {
                 handleSIGTERM: false,
                 handleSIGHUP: false,
                 defaultViewport: {
-                    width: 1700,
+                    width: 1920,
                     height: 1080
                 },
             },
@@ -35,15 +35,15 @@ exports.config = {
             users: {
                 admin: {
                     login: (I) => {
-                        I.amOnPage('http://localhost:8000');
+                        I.amOnPage('http://10.202.21.25:8000');
                         I.see('Sign in');
                         I.fillField('Username', 'admin');
                         I.fillField('Password', 'admin');
                         I.click('Login');
                     },
                     check: (I) => {
-                        I.amOnPage('http://localhost:8000');
-                        I.see('Sign in');
+                        I.amOnPage('http://10.202.21.25:8000/#/');
+                        I.see('admin');
                     }
                 }
             }
