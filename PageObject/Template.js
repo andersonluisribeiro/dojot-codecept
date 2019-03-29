@@ -51,6 +51,9 @@ module.exports = {
     fillNameTemplate: function (value) {
         I.fillField('Template Name', value);
     },
+    change64QtyToShowPagination(){
+        I.selectOption(locate('select').inside('.card-select-2'), '64');
+    },
     seeNameTemplate: function (value) {
         I.seeInputByNameAndValue('Template Name', value);
     },

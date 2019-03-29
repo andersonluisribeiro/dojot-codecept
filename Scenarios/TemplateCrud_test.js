@@ -7,6 +7,7 @@ Before((login) => {
 Scenario('Creating a template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
+    Template.change64QtyToShowPagination();
     Template.clickCreateNew();
     Template.fillNameTemplate('ATemp1');
 
@@ -90,6 +91,7 @@ Scenario('Creating a template', async (I, Template) => {
 Scenario('Checking create template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
+    Template.change64QtyToShowPagination();
     Template.clickCardByNameTemplate('ATemp1');
     Template.seeNameTemplate('ATemp1');
     Template.seeAttr(
@@ -117,6 +119,7 @@ Scenario('Checking create template', async (I, Template) => {
 Scenario('Updating a template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
+    Template.change64QtyToShowPagination();
     Template.clickCardByNameTemplate('ATemp1');
     Template.seeNameTemplate('ATemp1');
     Template.fillNameTemplate('ATemp2');
@@ -171,6 +174,7 @@ Scenario('Updating a template', async (I, Template) => {
 Scenario('Removing template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
+    Template.change64QtyToShowPagination();
     Template.clickCardByNameTemplate('ATemp2');
     Template.seeNameTemplate('ATemp2');
     Template.removeAttr('textNew', [
