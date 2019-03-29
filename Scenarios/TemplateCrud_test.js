@@ -157,6 +157,12 @@ Scenario('Updating a template', async (I, Template) => {
         ],
         true
     );
+
+    Template.removeAttr(
+        'float',
+        []
+    );
+
     Template.seeManageFirmware();
     Template.clickSave();
     Template.seeTemplateHasUpdated();

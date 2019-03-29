@@ -98,18 +98,21 @@ module.exports = {
             I.click(this.ButtonLabel.add);
         });
     },
-    updateAttr: function (oldFieldValue, newFieldValue, newAttrType, newAttrValueType, metaDataArray, newValue = '') {
-        this._clickToEditAAttr(oldFieldValue);
-        this._fillAttrForm(newFieldValue, newAttrType, newAttrValueType, newValue);
+    _metasArrayToAddUpdateRemove: function (metaDataArray) {
         metaDataArray.forEach((meta) => {
             if (meta.oldLabelValue) {
                 this._updateMeta(meta.oldLabelValue, meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
-            } else if (meta.removeLabelValue){
+            } else if (meta.removeLabelValue) {
                 this._removeMeta(meta.removeLabelValue);
-            }else{
+            } else {
                 this._addMeta(meta.labelValue, meta.typeValue, meta.attrValueType, meta.value);
             }
         });
+    },
+    updateAttr: function (oldFieldValue, newFieldValue, newAttrType, newAttrValueType, metaDataArray, newValue = '') {
+        this._clickToEditAAttr(oldFieldValue);
+        this._fillAttrForm(newFieldValue, newAttrType, newAttrValueType, newValue);
+        this._metasArrayToAddUpdateRemove(metaDataArray);
         within('.sidebar-attribute', () => {
             I.click(this.ButtonLabel.save);
         });
@@ -161,14 +164,12 @@ module.exports = {
     _clickToEditAAttr: function (label) {
         I.click(locate('.template-prop').withAttr({title: label, role: 'button'}));
     },
-    removeAttr: function (fieldValue, metasToRemove) {
+    removeAttr: function (fieldValue, metaDataArray) {
         this._clickToEditAAttr(fieldValue);
         within('.sidebar-attribute', () => {
             I.seeInputByNameAndValue('label', fieldValue);
         });
-        metasToRemove.forEach((meta) => {
-            this._removeMeta(meta.removeLabelValue);
-        });
+        this._metasArrayToAddUpdateRemove(metaDataArray);
         within('.sidebar-attribute', () => {
             I.click(this.ButtonLabel.remove);
         });
