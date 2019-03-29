@@ -4,16 +4,20 @@ Before(login => {
     login('admin');
 });
 
-Scenario('Creating a simple flow', async (I, FlowPage) => {
-    I = FlowPage;
+Scenario('Creating a simple flow', async (I, Flow) => {
+    I = Flow;
 
     I.clickOpen();
     I.clickCreateNew();
     I.setFlowName('my flow');
-    I.addDeviceToFlow();
-    I.addChangeToFlow();
-    I.addHttpToFlow();
+    I.addDeviceInput();
+    I.addSwitch();
+    I.addChange();
+    I.addDeviceOutput();
+    I.addNotification();
     await I.connectFlows();
-    I.clickOnSave();
-    I.seeFlowHasCreated();
+    I.editDeviceInput();
+    // I.clickOnSave();
+    // I.seeFlowHasCreated();
+
 });

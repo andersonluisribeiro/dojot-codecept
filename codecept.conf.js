@@ -29,7 +29,7 @@ exports.config = {
     include: {
         I: './steps_file.js',
         Template: "./PageObject/Template.js",
-        FlowPage: './PageObject/Flow.js',
+        Flow: './PageObject/Flow.js',
         Device: './PageObject/Device.js'
     },
     plugins: {
