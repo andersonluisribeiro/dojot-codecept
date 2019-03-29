@@ -10,7 +10,7 @@ exports.config = {
             keepBrowserState: true,
             show: true,
             waitForNavigation: ['networkidle2', 'domcontentloaded'],
-            waitForAction: 500,
+            // waitForAction: 500,
             chrome: {
                 args: ['--no-sandbox', '--start-maximized'],
                 handleSIGTERM: false,
@@ -28,6 +28,9 @@ exports.config = {
         FlowPage: './PageObject/Flow.js'
     },
     plugins: {
+        autoDelay: {
+            enabled: true
+        },
         autoLogin: {
             enabled: true,
             saveToFile: false,
