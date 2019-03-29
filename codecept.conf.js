@@ -27,6 +27,7 @@ exports.config = {
         FlowPage: './PageObject/Flow.js'
     },
     plugins: {
+        allure: {},
         autoDelay: {
             enabled: true
         },
