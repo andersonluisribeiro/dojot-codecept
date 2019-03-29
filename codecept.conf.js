@@ -10,7 +10,6 @@ exports.config = {
             keepBrowserState: true,
             show: true,
             waitForNavigation: ['networkidle2', 'domcontentloaded'],
-            // waitForAction: 500,
             chrome: {
                 args: ['--no-sandbox', '--start-maximized'],
                 handleSIGTERM: false,
@@ -28,6 +27,7 @@ exports.config = {
         FlowPage: './PageObject/Flow.js'
     },
     plugins: {
+        allure: {},
         autoDelay: {
             enabled: true
         },
@@ -39,6 +39,7 @@ exports.config = {
                 admin: {
                     login: (I) => {
                         I.amOnPage('http://10.202.21.25:8000');
+                        I.wait(1);
                         I.see('Sign in');
                         I.fillField('Username', 'admin');
                         I.fillField('Password', 'admin');

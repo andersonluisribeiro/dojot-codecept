@@ -5,10 +5,15 @@ Before(login => {
 });
 
 Scenario('Creating a simple flow', async (I, FlowPage) => {
-    FlowPage.clickOpen();
-    FlowPage.clickCreateNew();
-    FlowPage.addDeviceToFlow();
-    FlowPage.addChangeToFlow();
-    FlowPage.addHttpToFlow();
-    FlowPage.connectFlows();
+    I = FlowPage;
+
+    I.clickOpen();
+    I.clickCreateNew();
+    I.setFlowName('my flow');
+    I.addDeviceToFlow();
+    I.addChangeToFlow();
+    I.addHttpToFlow();
+    await I.connectFlows();
+    I.clickOnSave();
+    I.seeFlowHasCreated();
 });
