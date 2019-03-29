@@ -12,7 +12,11 @@ module.exports = {
 
     shouldSeeMessage(message){
         I.see(message);
-    }
+    },
+
+    change64QtyToShowPagination(){
+        I.selectOption(locate('select').inside('.card-select-2'), '64');
+    },
 
 
 }

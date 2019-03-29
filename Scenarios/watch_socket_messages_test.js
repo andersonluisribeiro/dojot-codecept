@@ -5,7 +5,7 @@ Before(login => {
 });
 
 Scenario('Watching a simple message', async (I, Device) => {
-   let template = await I.postJSON('template', {
+   let template = await I.createTemplate({
         label: "String Template",
         attrs: [
             {
@@ -18,7 +18,7 @@ Scenario('Watching a simple message', async (I, Device) => {
 
     let templateId = template['template']['id'];
 
-    let device = await I.postJSON('device', {
+    let device = await I.createDevice({
         "templates": [
             templateId
         ],
@@ -28,8 +28,10 @@ Scenario('Watching a simple message', async (I, Device) => {
     let deviceId = device['devices'][0]['id'];
 
     I.refreshPage();
-
+    Device.change64QtyToShowPagination();
+    
     await I.sendMQTTMessage(deviceId, '{"text": "my string"}');
+
     Device.editDevice(deviceId);
     Device.selectAttr('text');
     Device.shouldSeeMessage('my string');

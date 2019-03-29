@@ -30,6 +30,14 @@ module.exports = function () {
             return JSON.parse(response.getBody('utf8'));
         },
 
+        async createTemplate(json){
+            return this.postJSON('template', json);
+        },
+
+        async createDevice(json){
+            return this.postJSON('device', json);
+        },
+
         async sendMQTTMessage(deviceId, message){
             let client  = mqtt.connect(env.mqtt_host);
             await client.publish(`/admin/${deviceId}/attrs`, message);
