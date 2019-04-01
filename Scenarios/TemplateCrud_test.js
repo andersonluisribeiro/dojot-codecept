@@ -9,98 +9,100 @@ Scenario('Creating a template', async (I, Template) => {
     Template.clickOpenTemplatePage();
     Template.change64QtyToShowPagination();
     Template.clickCreateNew();
-    Template.fillNameTemplate('ATemp1');
+    Template.fillNameTemplate('1_NameOfTemplate');
 
     Template.addConfigTemplate(
         Template.ConfigurationType.protocol,
         'mqtt'
     );
 
+    Template.updateConfigTemplate(
+        Template.ConfigurationType.protocol,
+        Template.ConfigurationType.protocol,
+        'mqtt2'
+    );
+
     Template.addAttr(
-        'text',
+        'attrStringStatic',
         Template.AttributeType.static,
         Template.AttributeValueType.string,
         [
             Template.convertToObjectMetaToAdd(
-                'labelMeta1',
-                'typeValueMeta1',
+                'metaString',
+                'typeValueMetaString',
                 Template.AttributeValueType.string,
-                'valueMeta1')
+                'valueMetaString'),
+            Template.convertToObjectMetaToAdd(
+                'metaBool',
+                'typeValueMetaBool',
+                Template.AttributeValueType.boolean,
+                false),
         ],
-        'value of text'
+        'Value of text'
     );
 
-
     Template.addAttr(
-        'int',
+        'attrIntegerDynamic',
         Template.AttributeType.dynamic,
         Template.AttributeValueType.integer,
         [
             Template.convertToObjectMetaToAdd(
-                'labelMeta1',
-                'typeValueMeta1',
+                'metaString',
+                'typeValueMetaString',
+                Template.AttributeValueType.string,
+                'valueMetaString'),
+            Template.convertToObjectMetaToAdd(
+                'metaBool',
+                'typeValueMetaBool',
+                Template.AttributeValueType.boolean,
+                false),
+            Template.convertToObjectMetaToRemove(
+                'metaString'
+            ),
+            Template.convertToObjectMetaToUpdate(
+                'metaBool',
+                'metaChangeFromBoolToFloat',
+                'typeValueMetaFloat',
                 Template.AttributeValueType.float,
-                3.5)
+                3.14),
         ]
     );
 
     Template.addAttr(
-        'bool',
-        Template.AttributeType.static,
-        Template.AttributeValueType.boolean,
-        [
-            Template.convertToObjectMetaToAdd(
-                'labelMeta2',
-                'typeValueMeta2',
-                Template.AttributeValueType.boolean,
-                false),
-        ],
-        true
-    );
-
-    Template.addAttr(
-        'gps',
+        'attrGPSStatic',
         Template.AttributeType.static,
         Template.AttributeValueType.geo,
         [
             Template.convertToObjectMetaToAdd(
-                'labelMeta2',
-                'typeValueMeta2',
-                Template.AttributeValueType.integer,
-                55),
-
+                'metaString',
+                'typeValueMetaString',
+                Template.AttributeValueType.string,
+                'valueMetaString')
         ],
         '-22.826702502573774, -47.044628078647314'
     );
 
     Template.addAttr(
-        'float',
-        Template.AttributeType.static,
-        Template.AttributeValueType.float,
-        [
-            Template.convertToObjectMetaToAdd(
-                'labelMeta2',
-                'typeValueMeta2',
-                Template.AttributeValueType.geo,
-                '-11.2, -22'),
-
-        ],
-        5.5545
-    );
-
-    Template.addAttr(
-        'actuator',
+        'attrStringActuator',
         Template.AttributeType.actuator,
         Template.AttributeValueType.string,
         [
             Template.convertToObjectMetaToAdd(
-                'labelMeta3',
-                'typeValueMeta3',
-                Template.AttributeValueType.integer,
-                10),
-
+                'metaString',
+                'typeValueMetaString',
+                Template.AttributeValueType.string,
+                'valueMetaString')
         ],
-        'testActuator'
+        'Text Actuator'
+    );
+
+    Template.updateAttr(
+        'attrGPSStatic',
+        'attrGPSStaticChange',
+        Template.AttributeType.static,
+        Template.AttributeValueType.geo,
+        [],
+        '-23.826702502573774, -48.044628078647314'
     );
 
     Template.clickSave();
@@ -111,25 +113,75 @@ Scenario('Checking create template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
     Template.change64QtyToShowPagination();
-    Template.clickCardByNameTemplate('ATemp1');
-    Template.seeNameTemplate('ATemp1');
-    Template.seeAttr(
-        'text',
-        Template.AttributeType.static,
-        Template.AttributeValueType.string,
-        [
-            Template.convertToObjectMetaToAdd('labelMeta1',
-                'typeValueMeta1',
-                Template.AttributeValueType.string,
-                'valueMeta1')
-        ],
-        'value of text'
-    );
+    Template.clickCardByNameTemplate('1_NameOfTemplate');
+    Template.seeNameTemplate('1_NameOfTemplate');
 
     Template.seeConfigTemplate(
         Template.ConfigurationType.protocol,
-        'mqtt'
+        'mqtt2'
     );
+
+    Template.seeAttr(
+        'attrStringStatic',
+        Template.AttributeType.static,
+        Template.AttributeValueType.string,
+        [
+            Template.convertToObjectMeta(
+                'metaString',
+                'typeValueMetaString',
+                Template.AttributeValueType.string,
+                'valueMetaString'),
+            Template.convertToObjectMeta(
+                'metaBool',
+                'typeValueMetaBool',
+                Template.AttributeValueType.boolean,
+                false),
+        ],
+        'Value of text'
+    );
+
+    Template.seeAttr(
+        'attrIntegerDynamic',
+        Template.AttributeType.dynamic,
+        Template.AttributeValueType.integer,
+        [
+            Template.convertToObjectMeta(
+                'metaChangeFromBoolToFloat',
+                'typeValueMetaFloat',
+                Template.AttributeValueType.float,
+                3.14),
+        ]
+    );
+
+
+    Template.seeAttr(
+        'attrGPSStaticChange',
+        Template.AttributeType.static,
+        Template.AttributeValueType.geo,
+        [
+            Template.convertToObjectMeta(
+                'metaString',
+                'typeValueMetaString',
+                Template.AttributeValueType.string,
+                'valueMetaString')
+        ],
+        '-23.826702502573774, -48.044628078647314'
+    );
+
+    // the actuator is with problems on gui
+    /*    Template.seeAttr(
+            'attrStringActuator',
+            Template.AttributeType.actuator,
+            Template.AttributeValueType.string,
+            [
+                Template.convertToObjectMeta(
+                    'metaString',
+                    'typeValueMetaString',
+                    Template.AttributeValueType.string,
+                    'valueMetaString')
+            ],
+            'Text Actuator'
+        );*/
 
     Template.seeManageFirmware();
     Template.clickDiscard();
@@ -139,50 +191,71 @@ Scenario('Updating a template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
     Template.change64QtyToShowPagination();
-    Template.clickCardByNameTemplate('ATemp1');
-    Template.seeNameTemplate('ATemp1');
-    Template.fillNameTemplate('ATemp2');
+    Template.clickCardByNameTemplate('1_NameOfTemplate');
+    Template.seeNameTemplate('1_NameOfTemplate');
+    Template.fillNameTemplate('2_NameOfTemplate');
     Template.updateAttr(
-        'text',
-        'textNew',
+        'attrIntegerDynamic',
+        'attrIntegerDynamicChange',
         Template.AttributeType.static,
         Template.AttributeValueType.integer,
         [
             Template.convertToObjectMetaToUpdate(
-                'labelMeta1',
-                'labelMeta2',
-                'typeValueMeta2',
+                'metaChangeFromBoolToFloat',
+                'metaBoolChange',
+                'typeValueMetaBool',
                 Template.AttributeValueType.boolean,
-                false)
+                true)
         ],
         10
     );
 
-    Template.updateAttr(
-        'bool',
-        'boolNew',
-        Template.AttributeType.static,
-        Template.AttributeValueType.boolean,
-        [
-            Template.convertToObjectMetaToRemove('labelMeta2'),
-            Template.convertToObjectMetaToAdd(
-                'labelMeta1',
-                'Type',
-                Template.AttributeValueType.boolean,
-                false),
-            Template.convertToObjectMetaToUpdate(
-                'labelMeta1',
-                'labelMeta2',
-                'Type2',
-                Template.AttributeValueType.integer,
-                5),
-        ],
-        true
+    Template.updateConfigTemplate(
+        Template.ConfigurationType.protocol,
+        Template.ConfigurationType.topic,
+        'topic'
+    );
+    Template.addConfigTemplate(
+        Template.ConfigurationType.protocol,
+        'mqtt'
     );
 
+    Template.addAttr(
+        'attrBoolStatic',
+        Template.AttributeType.static,
+        Template.AttributeValueType.integer,
+        [
+            Template.convertToObjectMetaToAdd(
+                'metaString2',
+                'typeValueMetaString2',
+                Template.AttributeValueType.string,
+                'valueMetaString2'),
+            Template.convertToObjectMetaToAdd(
+                'metaBool2',
+                'typeValueMetaBool2',
+                Template.AttributeValueType.boolean,
+                false),
+            Template.convertToObjectMetaToRemove(
+                'metaString2'
+            ),
+            Template.convertToObjectMetaToUpdate(
+                'metaBool2',
+                'metaChangeFromBoolToFloat2',
+                'typeValueMetaFloat2',
+                Template.AttributeValueType.float,
+                3.14),
+        ],
+        45
+    );
+
+
     Template.removeAttr(
-        'float',
-        []
+        'attrStringStatic',
+        [
+            Template.convertToObjectMetaToRemove(
+                'metaString'
+            )
+        ]
     );
 
     Template.seeManageFirmware();
@@ -194,19 +267,25 @@ Scenario('Checking update template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
     Template.change64QtyToShowPagination();
-    Template.clickCardByNameTemplate('ATemp1');
-    Template.seeNameTemplate('ATemp1');
+    Template.clickCardByNameTemplate('2_NameOfTemplate');
+    Template.seeNameTemplate('2_NameOfTemplate');
     Template.seeAttr(
-        'text',
+        'attrIntegerDynamicChange',
         Template.AttributeType.static,
-        Template.AttributeValueType.string,
+        Template.AttributeValueType.integer,
         [
-            Template.convertToObjectMetaToAdd('labelMeta1',
-                'typeValueMeta1',
-                Template.AttributeValueType.string,
-                'valueMeta1')
+            Template.convertToObjectMeta(
+                'metaBoolChange',
+                'typeValueMetaBool',
+                Template.AttributeValueType.boolean,
+                true)
         ],
-        'value of text'
+        10
+    );
+
+    Template.seeConfigTemplate(
+        Template.ConfigurationType.topic,
+        'topic'
     );
 
     Template.seeConfigTemplate(
@@ -214,6 +293,20 @@ Scenario('Checking update template', async (I, Template) => {
         'mqtt'
     );
 
+    Template.seeAttr(
+        'attrBoolStatic',
+        Template.AttributeType.static,
+        Template.AttributeValueType.boolean,
+        [
+            Template.convertToObjectMeta(
+                'metaChangeFromBoolToFloat2',
+                'typeValueMetaFloat2',
+                Template.AttributeValueType.float,
+                3.14),
+        ],
+        false
+    );
+    Template.seeAttrHasRemoved('attrStringStatic');
     Template.seeManageFirmware();
     Template.clickDiscard();
 });
@@ -222,12 +315,15 @@ Scenario('Removing template', async (I, Template) => {
     Template.init(I);
     Template.clickOpenTemplatePage();
     Template.change64QtyToShowPagination();
-    Template.clickCardByNameTemplate('ATemp2');
-    Template.seeNameTemplate('ATemp2');
-    Template.removeAttr('textNew', [
-        Template.convertToObjectMetaToRemove('labelMeta2')
+    Template.clickCardByNameTemplate('2_NameOfTemplate');
+    Template.seeNameTemplate('2_NameOfTemplate');
+    Template.removeAttr('attrIntegerDynamicChange', [
+        Template.convertToObjectMetaToRemove('metaBoolChange')
     ]);
-    Template.removeConfigTemplate(Template.ConfigurationType.protocol);
+    Template.removeConfigTemplate(Template.ConfigurationType.topic);
+
+    Template.seeAttrHasRemoved('attrIntegerDynamicChange');
+
     Template.removeTemplate();
     Template.seeTemplateHasDelete();
 });
