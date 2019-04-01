@@ -1,5 +1,5 @@
 const I = actor();
-var ids;
+let ids;
 
 module.exports = {
 
@@ -35,7 +35,7 @@ module.exports = {
     addNotification(){
         I.dragSlider("#palette_node_device_out", 1200);
     },
-  
+
 
     async connectFlows(){
         ids = await I.grabAttributeFrom('.nodegroup', 'id');
@@ -59,6 +59,6 @@ module.exports = {
     //     I.see('Flow created.');
     // },
 
-    
+
 
 }

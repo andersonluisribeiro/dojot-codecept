@@ -88,8 +88,7 @@ module.exports = {
         });
     },
     _addMeta: function (labelValue, typeValue, attrValueType, value) {
-        I.waitForElement(locate('.body-actions--button div').withText('New Metadata'));
-        I.click(locate('.body-actions--button div').withText('New Metadata'));
+        this._clickOpenFooterBtnNew('New Metadata');
         this._fillMetaForm(labelValue, typeValue, attrValueType, value);
         I.click(this.ButtonLabel.add);
     },
@@ -99,8 +98,7 @@ module.exports = {
         I.click(this.ButtonLabel.save);
     },
     addAttr: function (fieldValue, attrType, attrValueType, metaDataArray, value = '') {
-        I.waitForElement(locate('.body-actions--button div').withText('New Attribute'));
-        I.click(locate('.body-actions--button div').withText('New Attribute'));
+        this._clickOpenFooterBtnNew('New Attribute');
         this._fillAttrForm(fieldValue, attrType, attrValueType, value);
         this._metasArrayToAddUpdateRemove(metaDataArray);
         within('.sidebar-attribute', () => {
@@ -196,14 +194,12 @@ module.exports = {
         });
     },
     addConfigTemplate: function (confType, value) {
-        I.waitForElement(locate('.body-actions--button div').withText('New Configuration'));
-        I.click(locate('.body-actions--button div').withText('New Configuration'));
+        this._clickOpenFooterBtnNew('New Configuration');
         this._fillConfigForm(confType, value);
         I.click(this.ButtonLabel.add);
     },
     seeConfigTemplate: function (confType, value) {
-        I.waitForElement(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
-        I.click(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
+        this._clickToEditAAttr(confType.toLowerCase());
         within('.sidebar-attribute', () => {
             I.seeSelectOptionByNameAndValue('label', confType);
             I.seeInputByNameAndValue('static_value', Util.toString(value));
@@ -211,33 +207,37 @@ module.exports = {
         });
     },
     updateConfigTemplate: function (oldConfType,newConfType, value) {
-        I.waitForElement(locate('.template-prop').withAttr({title: oldConfType.toLowerCase(), role: 'button'}));
-        I.click(locate('.template-prop').withAttr({title: oldConfType.toLowerCase(), role: 'button'}));
+        this._clickToEditAAttr(oldConfType.toLowerCase());
         this._fillConfigForm(newConfType, value);
         I.click(this.ButtonLabel.save);
     },
     removeConfigTemplate: function (confType) {
-        I.waitForElement(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
-        I.click(locate('.template-prop').withAttr({title: confType.toLowerCase(), role: 'button'}));
+        this._clickToEditAAttr(confType.toLowerCase());
         within('.sidebar-attribute', () => {
             I.seeSelectOptionByNameAndValue('label', confType);
             I.click(this.ButtonLabel.remove);
 
         });
         I.click('Confirm');
+        I.wait(1);
+    },
+    _clickOpenFooterBtnNew: function (labelBtn) {
+        I.waitForElement(locate('.body-actions--button div').withText(labelBtn));
+        I.click(locate('.body-actions--button div').withText(labelBtn));
     },
     seeManageFirmware: function () {
-        I.waitForElement(locate('.body-actions--button div').withText('Manage Firmware'));
-        I.click(locate('.body-actions--button div').withText('Manage Firmware'));
-        I.waitForElement(locate('.firmware-enabled'));
+        this._clickOpenFooterBtnNew('Manage Firmware');
+        I.waitForElement(locate('.firmware-enabled'),5);
         I.click(locate('.firmware-enabled'));
         I.click(this.ButtonLabel.discard);
+        I.wait(1);
     },
     clickSave: function () {
         I.click(this.ButtonLabel.save);
     },
     clickDiscard: function () {
         I.click(this.ButtonLabel.discard);
+        I.wait(1);
     },
     seeTemplateHasCreated: function () {
         I.wait(3);
@@ -246,6 +246,7 @@ module.exports = {
     removeTemplate: function () {
         I.click(this.ButtonLabel.remove);
         I.click('Confirm');
+        I.wait(1);
     },
     seeTemplateHasDelete: function () {
         I.wait(3);
