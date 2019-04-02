@@ -1,7 +1,32 @@
 const I = actor();
 let ids;
+var deviceId;
 
 module.exports = {
+    
+    async createADevice(){
+        let template = await I.createTemplate({
+            label: "String Template",
+            attrs: [
+                {
+                label: "text",
+                type: "dynamic",
+                value_type: "string"
+                }
+            ]
+        });
+    
+        let templateId = template['template']['id'];
+    
+        let device = await I.createDevice({
+            "templates": [
+                templateId
+            ],
+            "label": "String device"
+        });
+        
+        deviceId = device['devices'][0]['id'];
+    },
 
     clickOpen() {
         I.click(locate('a').withAttr({href: '#/flows'}));
@@ -50,6 +75,10 @@ module.exports = {
         I.doubleClick(`#${ids[0]}`);
         I.fillField('#node-input-name', "my input");
     },
+
+    selectDevice(){
+        I.fillField('#node-input-device_source_id', deviceId);
+    }
 
     // clickOnSave(){
     //     I.click('.new-btn-circle');

@@ -4,9 +4,10 @@ Before(login => {
     login('admin');
 });
 
-Scenario('Creating a simple flow', async (I, Flow) => {
+Scenario('Creating a simple flow', async (I, Flow, Template) => {
     I = Flow;
 
+    await I.createADevice();
     I.clickOpen();
     I.clickCreateNew();
     I.setFlowName('my flow');
