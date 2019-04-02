@@ -27,7 +27,6 @@ module.exports = {
                 }
             ]
         });
-        console.log('template created...');
     
         let templateId = template['template']['id'];
     
@@ -37,7 +36,6 @@ module.exports = {
             ],
             "label": "String device"
         });
-        console.log('device created...');
         
         return device['devices'][0]['id'];
     },
@@ -134,6 +132,23 @@ module.exports = {
 
     editDeviceOutputSource(){
         I.fillField('#node-input-attrs', 'out');
+    },
+
+    clickOnNotificationInput(){
+        I.click(`#${ids[4]}`);
+        I.doubleClick(`#${ids[4]}`);
+    },
+
+    editMessageType(){
+        I.selectOption("#node-input-msgType", 'Dynamic');
+    },
+
+    editMessageDynamicValue(){
+        I.fillField('#node-input-messageDynamic', 'out.output');
+    },
+
+    editMessageInputSource(){
+        I.fillField('#node-input-source', 'out');
     },
 
     clickOnSave(){

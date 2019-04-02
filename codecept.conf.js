@@ -30,7 +30,8 @@ exports.config = {
         I: './steps_file.js',
         Template: "./PageObject/Template.js",
         Flow: './PageObject/Flow.js',
-        Device: './PageObject/Device.js'
+        Device: './PageObject/Device.js',
+        Notification: './PageObject/Notification.js'
     },
     plugins: {
         allure: {},

@@ -4,7 +4,7 @@ Before(login => {
     login('admin');
 });
 
-Scenario('Creating a simple flow', async (I, Flow, Device) => {
+Scenario('Creating a simple flow', async (I, Flow, Device, Notification) => {
     Flow.init(I);
 
     const deviceId = await Flow.createDevice();
@@ -40,6 +40,12 @@ Scenario('Creating a simple flow', async (I, Flow, Device) => {
     Flow.editDeviceOutputSource();
     Flow.clickOnDone();
 
+    Flow.clickOnNotificationInput();
+    Flow.editMessageType();
+    Flow.editMessageDynamicValue();
+    Flow.editMessageInputSource();
+    Flow.clickOnDone();
+
     Flow.clickOnSave();
     Flow.seeFlowHasCreated();
 
@@ -52,7 +58,14 @@ Scenario('Creating a simple flow', async (I, Flow, Device) => {
     await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
     await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
     I.wait(5);
-    
+
     Device.shouldSeeMessage('output value');
+
+    await Notification.openNotificationsPage();
+    const totalBefore = await Notification.totalOfMessagesWithText('output value');
+    await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
+    I.wait(5);
+
+    await Notification.shouldISeeMessagesWithText('output value', totalBefore + 1);
    
 });
