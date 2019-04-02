@@ -13,7 +13,7 @@ exports.config = {
             show: true,
             waitForNavigation: ['networkidle2', 'domcontentloaded'],
             chrome: {
-                args: ['--no-sandbox', '--start-maximized'],
+                args: ['--no-sandbox', '--start-maximized', '--start-fullscreen'],
                 handleSIGTERM: false,
                 handleSIGHUP: false,
                 defaultViewport: {
@@ -46,11 +46,12 @@ exports.config = {
                 admin: {
                     login: (I) => {
                         I.amOnPage(env.dojot_host);
-                        I.wait(1);
+                        I.wait(3);
                         I.see('Sign in');
                         I.fillField('Username', 'admin');
                         I.fillField('Password', 'admin');
                         I.click('Login');
+                        I.wait(3);
                     },
                     check: (I) => {
                         I.amOnPage(`${env.dojot_host}/#/`);
