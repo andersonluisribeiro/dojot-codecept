@@ -35,15 +35,15 @@ module.exports = () => {
         },
 
         async createTemplate(json){
-            return this.postJSON('template', json);
+            return await this.postJSON('template', json);
         },
 
         async createDevice(json){
-            return this.postJSON('device', json);
+            return await this.postJSON('device', json);
         },
 
         async sendMQTTMessage(deviceId, message){
-            let client  = mqtt.connect(env.mqtt_host);
+            let client  = await mqtt.connect(env.mqtt_host);
             await client.publish(`/admin/${deviceId}/attrs`, message);
             await client.end();
         }

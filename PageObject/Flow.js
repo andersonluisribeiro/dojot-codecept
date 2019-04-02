@@ -1,20 +1,33 @@
-const I = actor();
-let ids;
+var env = require('../env.conf');
+var mqtt = require('async-mqtt');
+
+let I = actor();
+// let ids;
 var deviceId;
 
 module.exports = {
-    
-    async createADevice(){
+
+    init(i) {
+        I = i;
+    },
+
+    async createDevice(){
         let template = await I.createTemplate({
             label: "String Template",
             attrs: [
                 {
-                label: "text",
-                type: "dynamic",
-                value_type: "string"
+                    label: "input",
+                    type: "dynamic",
+                    value_type: "string"
+                },
+                {
+                    label: "output",
+                    type: "dynamic",
+                    value_type: "string"
                 }
             ]
         });
+        console.log('template created...');
     
         let templateId = template['template']['id'];
     
@@ -24,8 +37,9 @@ module.exports = {
             ],
             "label": "String device"
         });
+        console.log('device created...');
         
-        deviceId = device['devices'][0]['id'];
+        return device['devices'][0]['id'];
     },
 
     clickOpen() {
@@ -58,7 +72,7 @@ module.exports = {
     },
 
     addNotification(){
-        I.dragSlider("#palette_node_device_out", 1200);
+        I.dragSlider("#palette_node_notification", 1200);
     },
 
 
@@ -70,23 +84,71 @@ module.exports = {
         I.dragAndDrop(locate(`.port_output`).inside(`#${ids[2]}`), locate(`.port_input`).inside(`#${ids[4]}`));
     },
 
-    editDeviceInput(){
+    clickOnDeviceInput(){
         I.click(`#${ids[0]}`);
         I.doubleClick(`#${ids[0]}`);
+    },
+
+    editDeviceInputName(){
         I.fillField('#node-input-name', "my input");
     },
 
-    selectDevice(){
-        I.fillField('#node-input-device_source_id', deviceId);
+    selectDevice(deviceId){
+        I.fillField('#node-input-device_source_id', `String device (${deviceId})`);
+    },
+
+    clickOnDone(){
+        I.click("Done");
+    },
+
+    clickOnSwitch(){
+        I.click(`#${ids[1]}`);
+        I.doubleClick(`#${ids[1]}`);
+    },
+
+    editSwitchProperty(){
+        I.fillField('#node-input-property', 'payload.input');
+    },
+
+    editSwitchCondition(){
+        I.fillField('.node-input-rule-value', 'input value');
+    },
+
+    clickOnChange(){
+        I.click(`#${ids[2]}`);
+        I.doubleClick(`#${ids[2]}`);
+    },
+
+    editChangeProperty(){
+        I.fillField('.node-input-rule-property-name', 'out.output');
+    },
+
+    editChangePropertyValue(){
+        I.fillField('.node-input-rule-property-value', 'output value');
+    },
+
+    clickOnDeviceOutput(){
+        I.click(`#${ids[3]}`);
+        I.doubleClick(`#${ids[3]}`);
+    },
+
+    editDeviceOutputSource(){
+        I.fillField('#node-input-attrs', 'out');
+    },
+
+    clickOnSave(){
+        I.click('.new-btn-circle');
+    },
+
+    seeFlowHasCreated() {
+        I.wait(1);
+        I.see('Flow created.');
+    },
+
+    async sendMQTTMessages(deviceId){
+        await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
+        await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
     }
-
-    // clickOnSave(){
-    //     I.click('.new-btn-circle');
-    // },
-
-    // seeFlowHasCreated() {
-    //     I.see('Flow created.');
-    // },
 
 
 
