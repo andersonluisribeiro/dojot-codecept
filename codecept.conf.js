@@ -1,7 +1,7 @@
 let env = require('./env.conf');
 
 exports.config = {
-  tests: './Scenarios/*_test.js',
+  tests: './Scenarios/*iceCrud_test.js',
     output: './output',
     helpers: {
         Puppeteer: {
