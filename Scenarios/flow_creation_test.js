@@ -56,7 +56,6 @@ Scenario('Creating a simple flow', async (I, Flow, Device, Notification) => {
 
     await Device.selectAttrSync('output');
     await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
-    await I.sendMQTTMessage(deviceId, '{"input": "input value"}');
     I.wait(5);
 
     Device.shouldSeeMessage('output value');
