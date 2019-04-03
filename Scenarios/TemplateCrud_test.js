@@ -1,4 +1,4 @@
-Feature('Template creation');
+Feature('Template CRUD');
 
 Before((login) => {
     login('admin');

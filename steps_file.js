@@ -1,9 +1,9 @@
-var mqtt = require('async-mqtt')
-var request = require('sync-request');
-var env = require('./env.conf');
+const mqtt = require('async-mqtt')
+const request = require('sync-request');
+const env = require('./env.conf');
 
 module.exports = () => {
-    var jwt;
+    let jwt;
 
     return actor({
 
@@ -19,7 +19,7 @@ module.exports = () => {
             this.selectOption(locate('select').withAttr({name}), value);
         },
 
-        async postJSON(resource, myJson){ 
+        async postJSON(resource, myJson){
             if(!jwt){
                 jwt = await this.executeScript(() => { return localStorage.getItem('jwt')});
             }
