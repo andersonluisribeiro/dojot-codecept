@@ -52,6 +52,8 @@ exports.config = {
                         I.fillField('Password', 'admin');
                         I.click('Login');
                         I.wait(3);
+                        I.clearDatabase();
+                        I.refreshPage();
                     },
                     check: (I) => {
                         I.amOnPage(`${env.dojot_host}/#/`);

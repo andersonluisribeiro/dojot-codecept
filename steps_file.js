@@ -42,6 +42,12 @@ module.exports = () => {
             return await this.postJSON('device', json);
         },
 
+        async clearDatabase(){
+            return await this.postJSON('import', {
+                "devices":[],"templates":[],"flows":[]
+            });
+        },
+
         async sendMQTTMessage(deviceId, message){
             let client  = await mqtt.connect(env.mqtt_host);
             await client.publish(`/admin/${deviceId}/attrs`, message);
