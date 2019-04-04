@@ -3,11 +3,11 @@ let env = require('./env.conf');
 exports.config = {
   tests: './Scenarios/*_test.js',
     output: './output',
-    // multiple: {
-    //     parallel: {
-    //       chunks: 1
-    //     }
-    // },
+    multiple: {
+        parallel: {
+          chunks: 1
+        }
+    },
     helpers: {
         Puppeteer: {
             url: env.dojot_host,
