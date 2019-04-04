@@ -19,12 +19,12 @@ module.exports = () => {
             this.selectOption(locate('select').withAttr({name}), value);
         },
 
-        async postJSON(resource, myJson){
+        async postJSON(resource, myJson, method='POST'){
             if(!jwt){
                 jwt = await this.executeScript(() => { return localStorage.getItem('jwt')});
             }
 
-            let response = request('POST', `${env.dojot_host}/${resource}`, {
+            let response = request(method, `${env.dojot_host}/${resource}`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 },
@@ -38,14 +38,18 @@ module.exports = () => {
             return await this.postJSON('template', json);
         },
 
+        async updateTemplate(json, templateID){
+            return await this.postJSON('template/'+templateID, json, 'PUT');
+        },
+
         async createDevice(json){
             return await this.postJSON('device', json);
         },
 
         async clearDatabase(){
-            return await this.postJSON('import', {
+            /*return await this.postJSON('import', {
                 "devices":[],"templates":[],"flows":[]
-            });
+            });*/
         },
 
         async sendMQTTMessage(deviceId, message){

@@ -163,5 +163,9 @@ module.exports = {
     change64QtyToShowPagination(){
         I.selectOption(locate('select').inside('.card-select-2'), '64');
     },
+    seeHasCreated: function () {
+        I.wait(3);
+        I.see('Device created.');
+    },
 
 }
