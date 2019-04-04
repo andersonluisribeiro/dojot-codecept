@@ -1,8 +1,13 @@
 let env = require('./env.conf');
 
 exports.config = {
-  tests: './Scenarios/*iceCrud_test.js',
+  tests: './Scenarios/*_test.js',
     output: './output',
+    // multiple: {
+    //     parallel: {
+    //       chunks: 1
+    //     }
+    // },
     helpers: {
         Puppeteer: {
             url: env.dojot_host,
