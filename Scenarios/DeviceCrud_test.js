@@ -4,9 +4,9 @@ Before((login) => {
     login('admin');
 });
 
-let template1 ={
+let template1 = {
     id: null,
-    name:  '1 - Template',
+    name: '1 - Template',
     attrsDynamics: [
         {
             value_type: 'boolean',
@@ -69,7 +69,7 @@ let template1 ={
             static_value: 'undefined',
         }
     ],
-    attrsConfig:  [
+    attrsConfig: [
         {
             value_type: 'string',
             label: 'protocol',
@@ -77,7 +77,7 @@ let template1 ={
             static_value: 'mqtt'
         }
     ],
-    attrsActuators:  [
+    attrsActuators: [
         {
             value_type: 'string',
             label: 'msg',
@@ -85,18 +85,35 @@ let template1 ={
             static_value: ''
         }
     ],
-    json: {}
-};
-template1.json = {
-    label: template1.name,
-    attrs: [
-        ...template1.attrsActuators,
-        ...template1.attrsConfig,
-        ...template1.attrsStatics,
-        ...template1.attrsDynamics,
-    ]
+    json:{}
 };
 
+const loadJson = () =>{
+    template1.json = {
+        label: template1.name,
+        attrs: [
+            ...template1.attrsActuators,
+            ...template1.attrsConfig,
+            ...template1.attrsStatics,
+            ...template1.attrsDynamics,
+        ]
+    }
+};
+loadJson();
+
+function checkingAttrTemplate(Device) {
+    Device.clickToManageAttributes(Device.AttributeTypes.configuration);
+    Device.seeAllConfigurations(template1.attrsConfig);
+    Device.clickDiscard();
+
+    Device.clickToManageAttributes(Device.AttributeTypes.dynamic);
+    Device.seeAllDynamics(template1.attrsDynamics);
+    Device.clickDiscard();
+
+    Device.clickToManageAttributes(Device.AttributeTypes.static);
+    Device.seeAllStatic(template1.attrsStatics);
+    Device.clickDiscard();
+}
 
 Scenario('Creating a device', async (I, Device) => {
 
@@ -115,22 +132,12 @@ Scenario('Creating a device', async (I, Device) => {
     Device.clickToSelectTemplate(template1.name);
     Device.clickBack();
 
-    Device.clickToManageAttributes(Device.AttributeTypes.configuration);
-    Device.seeAllConfigurations(template1.attrsConfig);
-    Device.clickDiscard();
-
-    Device.clickToManageAttributes(Device.AttributeTypes.dynamic);
-    Device.seeAllDynamics(template1.attrsDynamics);
-    Device.clickDiscard();
-
-    Device.clickToManageAttributes(Device.AttributeTypes.static);
-    Device.seeAllStatic(template1.attrsStatics);
-    Device.clickDiscard();
+    checkingAttrTemplate(Device);
 
     ///see for actuator based on Dynamics
-/*    Device.clickToManageAttributes(Device.AttributeTypes.actuator);
-    Device.seeAllDynamics(template1.attrsActuators);
-    Device.clickDiscard();*/
+    /*    Device.clickToManageAttributes(Device.AttributeTypes.actuator);
+        Device.seeAllDynamics(template1.attrsActuators);
+        Device.clickDiscard();*/
 
     Device.fillAttrStaticValue('serial', 'ABCDEFG-86');
     Device.fillConfigurationValue(Device.ConfigurationType.protocol, 'mqtt2');
@@ -142,16 +149,17 @@ Scenario('Creating a device', async (I, Device) => {
 });
 
 
-/*Scenario('Updating a device (with update into template)', async (I, Device) => {
+Scenario('Updating a device', async (I, Device) => {
 
-    /!*    This will be discommented
+    /*    This will be discommented
 
         template1Json.attrs[7].static_value = 'updateValueWithoutEditOnDevice';
         template1Json.attrs[8].metadata[0].static_value = 'updateValueWithEditOnDevice';
-        template1Json.attrs[8].metadata[1].static_value = 'updateValueWithoutEditOnDevice';
+        template1.Json.attrs[8].metadata[1].static_value = 'updateValueWithoutEditOnDevice';
         template1Json.attrs[8].static_value = 'updateValueWithEditOnDevice';
 
-        await I.updateTemplate(template1Json, template1Id);*!/
+        await I.updateTemplate(template1Json, template1Id);
+        */
 
     Device.init(I);
     Device.change64QtyToShowPagination();
@@ -161,10 +169,37 @@ Scenario('Creating a device', async (I, Device) => {
     Device.fillAttrStaticValue('serial', 'change-ABCDEFG-86');
     Device.fillConfigurationValue(Device.ConfigurationType.protocol, 'mqtt');
     Device.fillMetaStaticValue('serial', 'meta1', 10);
-    Device.fillMetaDynamicValue('float', 'unit', '22');
+    Device.fillMetaDynamicValue('float', 'unit', '11');
 
     Device.clickSave();
 
-});*/
+    Device.seeHasUpdated();
 
+});
+
+Scenario('Checking a device update', async (I, Device) => {
+
+    Device.init(I);
+    Device.change64QtyToShowPagination();
+    Device.clickCardByDeviceName('Name of device charge');
+
+    template1.attrsStatics[0].static_value = 'change-ABCDEFG-86';
+    template1.attrsConfig[0].static_value = 'mqtt';
+    //template1.attrsStatics[0].metadata[0].static_value = 'static_value';
+    //template1.attrsDynamics[1].metadata[0].static_value = '11';
+
+    checkingAttrTemplate(Device);
+
+    Device.clickDiscard();
+
+});
+
+Scenario('Removing a device', async (I, Device) => {
+    Device.init(I);
+    Device.change64QtyToShowPagination();
+    Device.clickCardByDeviceName('Name of device charge');
+    Device.clickRemove();
+    Device.clickConfirm();
+    Device.seeHasRemoved();
+});
 

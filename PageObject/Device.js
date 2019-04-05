@@ -50,6 +50,7 @@ module.exports = {
     },
 
     clickToManageAttributes(attributeType) {
+        I.waitForElement(locate('.sidebar-button').withAttr({title: attributeType, role: 'button'}),10);
         I.click(locate('.sidebar-button').withAttr({title: attributeType, role: 'button'}));
     },
 
@@ -97,7 +98,7 @@ module.exports = {
 
     _fillStaticValue: function (label, newValue) {
         I.fillField(locate('input').before(locate('label').withText(label)), newValue);
-        this.clickSave();
+        this.clickSaveAttrs();
     },
 
     fillAttrStaticValue(label, newValue) {
@@ -118,7 +119,7 @@ module.exports = {
         within(locate('.attr-card-metadata-body').withAttr({id: 'meta_data:' + labelAttr}), () => {
             I.fillField(locate('input').withAttr({name: labelMeta}), Util.toString(newValueMeta));
         });
-        this.clickSave();
+        this.clickSaveAttrs();
     },
 
     fillMetaStaticValue(labelAttr, labelMeta, newValueMeta) {
@@ -141,6 +142,18 @@ module.exports = {
 
     clickSave() {
         I.click('Save');
+    },
+    clickSaveAttrs() {
+
+        I.click('#btn-save-attrs');
+    },
+
+    clickConfirm() {
+        I.click('Confirm');
+    },
+
+    clickRemove() {
+        I.click('Remove');
     },
 
     openDevicesPage() {
@@ -178,5 +191,13 @@ module.exports = {
 
     seeHasCreated: function () {
         I.waitForText('Device created.', 20);
+    },
+
+    seeHasUpdated: function () {
+        I.waitForText('Device updated.', 20);
+    },
+
+    seeHasRemoved: function () {
+        I.waitForText('Device removed.', 20);
     },
 };
