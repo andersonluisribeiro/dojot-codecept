@@ -51,7 +51,7 @@ Scenario('Creating a simple flow', async (I, Flow, Device, Notification) => {
 
     Device.openDevicesPage();
     Device.change64QtyToShowPagination();
-    Device.editDevice(deviceId);
+    Device.clickDetailsDevice(deviceId);
     Device.selectAttr('input');
 
     await Device.selectAttrSync('output');
@@ -66,5 +66,5 @@ Scenario('Creating a simple flow', async (I, Flow, Device, Notification) => {
     I.wait(5);
 
     await Notification.shouldISeeMessagesWithText('output value', totalBefore + 1);
-   
+
 });

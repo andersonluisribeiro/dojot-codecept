@@ -47,9 +47,9 @@ module.exports = () => {
         },
 
         async clearDatabase(){
-            /*return await this.postJSON('import', {
+            return await this.postJSON('import', {
                 "devices":[],"templates":[],"flows":[]
-            });*/
+            });
         },
 
         async sendMQTTMessage(deviceId, message){

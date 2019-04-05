@@ -50,13 +50,12 @@ module.exports = {
     },
 
     clickToManageAttributes(attributeType) {
-        //.sidebar-button role=button title
         I.click(locate('.sidebar-button').withAttr({title: attributeType, role: 'button'}));
     },
 
     seeAllConfigurations(arrayConfigurations) {
         arrayConfigurations.forEach(config => {
-            I.seeElement(locate('input').withAttr({value: Util.toString(config.static_value)}).before(locate('label').withText(config.label)));
+            I.seeElement(locate('input').withAttr({value: Util.toString(config.static_value)}).before(locate('label').withText(Util.uppercaseFirstLetter(config.label))));
         });
     },
 
@@ -68,18 +67,20 @@ module.exports = {
     },
 
     _seeMetas: function (attr) {
-        I.seeElement(locate('.attr-card-input-wrapper div').withText(attr.label));
-        I.click(locate('.attr-card-metadata-arrow').withAttr({
-            id: 'meta_show:' + attr.label,
-            role: 'button'
-        }));
-        within(locate('.attr-card-metadata-body').withAttr({id: 'meta_data:' + attr.label}), () => {
-            attr.metas.forEach(meta => {
-                I.seeElement(locate('label').withText(`${meta.label} (${meta.type})`));
-                I.seeElement(locate('input').withAttr({name: meta.label, value: Util.toString(meta.static_value)}));
-                I.seeElement(locate('.attr-card-type').withText(meta.value_type));
+        if (attr.metadata && attr.metadata.length > 0) {
+            I.seeElement(locate('.attr-card-input-wrapper div').withText(attr.label));
+            I.click(locate('.attr-card-metadata-arrow').withAttr({
+                id: 'meta_show:' + attr.label,
+                role: 'button'
+            }));
+            within(locate('.attr-card-metadata-body').withAttr({id: 'meta_data:' + attr.label}), () => {
+                attr.metadata.forEach(meta => {
+                    I.seeElement(locate('label').withText(`${meta.label} (${meta.type})`));
+                    I.seeElement(locate('input').withAttr({name: meta.label, value: Util.toString(meta.static_value)}));
+                    I.seeElement(locate('.attr-card-type').withText(Util.uppercaseFirstLetter(meta.value_type)));
+                });
             });
-        });
+        }
     },
 
     seeAllDynamics(arrayAttrs) {
@@ -87,7 +88,7 @@ module.exports = {
 
             within(locate('.attr-card-input-wrapper').withAttr({id: `label:${attr.label}`}), () => {
                 I.seeElement(locate('div').withText(attr.label));
-                I.seeElement(locate('div').withText(attr.type));
+                I.seeElement(locate('div').withText(Util.uppercaseFirstLetter(attr.value_type)));
             });
 
             this._seeMetas(attr);
@@ -98,14 +99,17 @@ module.exports = {
         I.fillField(locate('input').before(locate('label').withText(label)), newValue);
         this.clickSave();
     },
+
     fillAttrStaticValue(label, newValue) {
         this.clickToManageAttributes(this.AttributeTypes.static);
         this._fillStaticValue(label, newValue);
     },
+
     fillConfigurationValue(label, newValue) {
         this.clickToManageAttributes(this.AttributeTypes.configuration);
         this._fillStaticValue(label, newValue);
     },
+
     _fillMetaValue: function (labelAttr, labelMeta, newValueMeta) {
         I.click(locate('.attr-card-metadata-arrow').withAttr({
             id: 'meta_show:' + labelAttr,
@@ -116,14 +120,17 @@ module.exports = {
         });
         this.clickSave();
     },
-    fillMetaStaticValue(labelAttr, labelMeta, newValueMeta){
+
+    fillMetaStaticValue(labelAttr, labelMeta, newValueMeta) {
         this.clickToManageAttributes(this.AttributeTypes.static);
         this._fillMetaValue(labelAttr, labelMeta, newValueMeta);
     },
-    fillMetaDynamicValue(labelAttr, labelMeta, newValueMeta){
+
+    fillMetaDynamicValue(labelAttr, labelMeta, newValueMeta) {
         this.clickToManageAttributes(this.AttributeTypes.dynamic);
         this._fillMetaValue(labelAttr, labelMeta, newValueMeta);
     },
+
     clickDiscard() {
         I.click('Discard');
     },
@@ -136,36 +143,40 @@ module.exports = {
         I.click('Save');
     },
 
-    openDevicesPage(){
-        I.click(locate('a').withAttr({ href: `#/device` }));
+    openDevicesPage() {
+        I.click(locate('a').withAttr({href: `#/device`}));
     },
 
-    editDevice(deviceId) {
+    clickCardByDeviceName: function (name) {
+        I.waitForElement(locate('.card-size  span').withAttr({title: name}));
+        I.click(locate('.card-size  span').withAttr({title: name}));
+    },
+
+    clickDetailsDevice(deviceId) {
         I.click(locate('a').withAttr({href: `#/device/id/${deviceId}/detail`}));
     },
 
-    selectAttr(attr){
-        I.click(locate('div').withAttr({ title: attr }));
+    selectAttr(attr) {
+        I.click(locate('div').withAttr({title: attr}));
     },
 
-    selectAttrWithCallback(attr, callback){
-        I.click(locate('div').withAttr({ title: attr })).then(callback);
+    selectAttrWithCallback(attr, callback) {
+        I.click(locate('div').withAttr({title: attr})).then(callback);
     },
 
-    async selectAttrSync(attr){
-        await I.click(locate('div').withAttr({ title: attr }));
+    async selectAttrSync(attr) {
+        await I.click(locate('div').withAttr({title: attr}));
     },
 
     shouldSeeMessage(message) {
         I.see(message);
     },
 
-    change64QtyToShowPagination(){
+    change64QtyToShowPagination() {
         I.selectOption(locate('select').inside('.card-select-2'), '64');
     },
-    seeHasCreated: function () {
-        I.wait(3);
-        I.see('Device created.');
-    },
 
-}
+    seeHasCreated: function () {
+        I.waitForText('Device created.', 20);
+    },
+};

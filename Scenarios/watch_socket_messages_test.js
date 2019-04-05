@@ -24,15 +24,15 @@ Scenario('Watching a simple message', async (I, Device) => {
         ],
         "label": "String device"
     });
-    
+
     let deviceId = device['devices'][0]['id'];
 
     I.refreshPage();
     Device.change64QtyToShowPagination();
-    
+
     await I.sendMQTTMessage(deviceId, '{"text": "my string"}');
 
-    Device.editDevice(deviceId);
+    Device.clickDetailsDevice(deviceId);
     Device.selectAttr('text');
     Device.shouldSeeMessage('my string');
 
