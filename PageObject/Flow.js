@@ -27,16 +27,16 @@ module.exports = {
                 }
             ]
         });
-    
+
         let templateId = template['template']['id'];
-    
+
         let device = await I.createDevice({
             "templates": [
                 templateId
             ],
             "label": "String device"
         });
-        
+
         return device['devices'][0]['id'];
     },
 
@@ -54,23 +54,26 @@ module.exports = {
     },
 
     addDeviceInput(){
-        I.dragSlider("#palette_node_device_in", 400);
+        I.dragSlider("#palette_node_device_in", 300);
     },
 
     addSwitch(){
-        I.dragSlider("#palette_node_switch", 600);
+        I.dragSlider("#palette_node_switch", 400);
     },
 
     addChange(){
-        I.dragSlider("#palette_node_change", 800);
+        I.dragSlider("#palette_node_change", 500);
     },
 
     addDeviceOutput(){
-        I.dragSlider("#palette_node_device_out", 1000);
+        I.click("#palette-collapse-all");
+        I.click("#palette-header-deprecated_nodes");
+        I.dragSlider("#palette_node_device_out", 600);
     },
 
     addNotification(){
-        I.dragSlider("#palette_node_notification", 1200);
+        I.click("#palette-header-output");
+        I.dragSlider("#palette_node_notification", 700);
     },
 
 
