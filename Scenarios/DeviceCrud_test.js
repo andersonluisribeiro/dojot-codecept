@@ -59,12 +59,24 @@ let template1 = {
                     static_value: "value",
                     type: "type_string_x",
                     value_type: "string"
+                },
+                {
+                    label: "meta3",
+                    static_value: "value",
+                    type: "type_string_x",
+                    value_type: "string"
                 }
             ],
         },
         {
             value_type: 'string',
             label: 'str_static',
+            type: 'static',
+            static_value: 'undefined',
+        },
+        {
+            value_type: 'string',
+            label: 'str_static2',
             type: 'static',
             static_value: 'undefined',
         }
@@ -87,19 +99,19 @@ let template1 = {
     ],
     json: {}
 };
-
-const loadJson = () => {
-    template1.json = {
-        label: template1.name,
+const loadJson = (template) => {
+    template.json = {
+        label: template.name,
         attrs: [
-            ...template1.attrsActuators,
-            ...template1.attrsConfig,
-            ...template1.attrsStatics,
-            ...template1.attrsDynamics,
+            ...template.attrsActuators,
+            ...template.attrsConfig,
+            ...template.attrsStatics,
+            ...template.attrsDynamics,
         ]
     }
 };
-loadJson();
+
+loadJson(template1);
 
 function checkingAttrTemplate(Device, template) {
     Device.clickToManageAttributes(Device.AttributeTypes.configuration);
@@ -135,9 +147,12 @@ Scenario('Creating a device', async (I, Device) => {
     checkingAttrTemplate(Device, template1);
 
     Device.fillAttrStaticValue('serial', 'ABCDEFG-86');
+    Device.fillAttrStaticValue('str_static2', 'ABC2');
     Device.fillConfigurationValue(Device.ConfigurationType.protocol, 'mqtt2');
     Device.fillMetaStaticValue('serial', 'meta1', 22);
+    Device.fillMetaStaticValue('serial', 'meta3', 'value2');
     Device.fillMetaDynamicValue('float', 'unit', '40');
+
     Device.clickSave();
 
     Device.seeHasCreated();
@@ -153,6 +168,8 @@ Scenario('Checking a device create', async (I, Device) => {
     templateJustToCheck.attrsStatics[0].static_value = 'ABCDEFG-86';
     templateJustToCheck.attrsConfig[0].static_value = 'mqtt2';
     templateJustToCheck.attrsStatics[0].metadata[0].static_value = 22;
+    templateJustToCheck.attrsStatics[0].metadata[2].static_value = 'value2';
+    templateJustToCheck.attrsStatics[2].static_value = 'ABC2';
     templateJustToCheck.attrsDynamics[1].metadata[0].static_value = '40';
     checkingAttrTemplate(Device, templateJustToCheck);
 
@@ -165,12 +182,13 @@ Scenario('Updating a device', async (I, Device) => {
     Device.init(I);
     Device.change64QtyToShowPagination();
     Device.clickCardByDeviceName('Name of device');
-    Device.fillNameDevice('Name of device charge');
+    Device.fillNameDevice('Name of device change');
 
     Device.fillAttrStaticValue('serial', 'change-ABCDEFG-86');
     Device.fillConfigurationValue(Device.ConfigurationType.protocol, 'mqtt');
     Device.fillMetaStaticValue('serial', 'meta1', 10);
     Device.fillMetaDynamicValue('float', 'unit', '11');
+    Device.fillAttrStaticValue('str_static2', 'ABC');
 
     Device.clickSave();
 
@@ -182,13 +200,15 @@ Scenario('Checking a device update', async (I, Device) => {
 
     Device.init(I);
     Device.change64QtyToShowPagination();
-    Device.clickCardByDeviceName('Name of device charge');
+    Device.clickCardByDeviceName('Name of device change');
 
     const templateJustToCheck = JSON.parse(JSON.stringify(template1));
     templateJustToCheck.attrsStatics[0].static_value = 'change-ABCDEFG-86';
     templateJustToCheck.attrsConfig[0].static_value = 'mqtt';
     templateJustToCheck.attrsStatics[0].metadata[0].static_value = 10;
     templateJustToCheck.attrsDynamics[1].metadata[0].static_value = '11';
+    templateJustToCheck.attrsStatics[0].metadata[2].static_value = 'value2';
+    templateJustToCheck.attrsStatics[2].static_value = 'ABC';
     checkingAttrTemplate(Device, templateJustToCheck);
 
     Device.clickDiscard();
@@ -196,17 +216,18 @@ Scenario('Checking a device update', async (I, Device) => {
 });
 
 
-Scenario('Checking a after change template', async (I, Device) => {
+Scenario('Checking after change template', async (I, Device) => {
 
-    //str_static
-    template1.attrsStatics[1].static_value = 'updateValueWithoutEditOnDevice';
 
     //attr serial
     template1.attrsStatics[0].static_value = 'updateValueWithEditOnDevice';
-    //meta1
-    template1.attrsStatics[0].metadata[0].static_value = 33;
     //meta2
     template1.attrsStatics[0].metadata[1].static_value = 'updateValueWithoutEditOnDevice';
+    //meta3
+    template1.attrsStatics[0].metadata[2].static_value = 'updateValueWithEditOnDevice';
+
+    //str_static
+    template1.attrsStatics[1].static_value = 'updateValueWithoutEditOnDevice';
 
     await I.updateTemplate(template1.json, template1.id);
 
@@ -215,24 +236,62 @@ Scenario('Checking a after change template', async (I, Device) => {
     templateJustToCheck.attrsConfig[0].static_value = 'mqtt';
     templateJustToCheck.attrsStatics[0].metadata[0].static_value = 10;
     templateJustToCheck.attrsDynamics[1].metadata[0].static_value = '11';
+    templateJustToCheck.attrsStatics[0].metadata[2].static_value = 'value2';
+    templateJustToCheck.attrsStatics[2].static_value = 'ABC';
 
     Device.init(I);
     Device.change64QtyToShowPagination();
-    Device.clickCardByDeviceName('Name of device charge');
+    Device.clickCardByDeviceName('Name of device change');
 
     checkingAttrTemplate(Device, templateJustToCheck);
 
     Device.clickDiscard();
 
 });
-
-
 Scenario('Removing a device', async (I, Device) => {
     Device.init(I);
     Device.change64QtyToShowPagination();
-    Device.clickCardByDeviceName('Name of device charge');
+    Device.clickCardByDeviceName('Name of device change');
     Device.clickRemove();
     Device.clickConfirm();
     Device.seeHasRemoved();
 });
+
+
+/**
+ Scenario('Updating a device - specialized', async (I, Device) => {
+
+    template1.attrsStatics[0].metadata[2].static_value = 'value3';
+    template1.attrsStatics[2].static_value = 'ABCD';
+    await I.updateTemplate(template1.json, template1.id);
+
+    Device.init(I);
+    Device.change64QtyToShowPagination();
+    Device.clickCardByDeviceName('Name of device charge');
+    Device.fillNameDevice('Name of device');
+    Device.clickSave();
+    Device.seeHasUpdated();
+});
+
+ Scenario('Checking a after specialized change  ', async (I, Device) => {
+
+    const templateJustToCheck = JSON.parse(JSON.stringify(template1));
+    templateJustToCheck.attrsStatics[0].static_value = 'change-ABCDEFG-86';
+    templateJustToCheck.attrsConfig[0].static_value = 'mqtt';
+    templateJustToCheck.attrsStatics[0].metadata[0].static_value = 10;
+    templateJustToCheck.attrsDynamics[1].metadata[0].static_value = '11';
+    templateJustToCheck.attrsStatics[0].metadata[2].static_value = 'value2';
+    templateJustToCheck.attrsStatics[2].static_value = 'ABC';
+
+    Device.init(I);
+    Device.change64QtyToShowPagination();
+    Device.clickCardByDeviceName('Name of device');
+
+    checkingAttrTemplate(Device, templateJustToCheck);
+
+    Device.clickDiscard();
+
+});*/
+
+
 
