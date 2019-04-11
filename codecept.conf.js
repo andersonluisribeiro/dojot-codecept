@@ -1,7 +1,7 @@
 let env = require('./env.conf');
 
 exports.config = {
-  tests: './Scenarios/*_test.js',
+  tests: './Scenarios/*ceCrud_test.js',
     output: './output',
     multiple: {
         parallel: {
