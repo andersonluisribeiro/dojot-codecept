@@ -91,7 +91,7 @@ module.exports = {
             I.fillField(locate('input').first(), fieldValue);
             I.fillSelectByName('type', attrType);
             I.fillSelectByName('value_type', attrValueType);
-            if (attrType !== this.AttributeType.dynamic && value) {
+            if ((attrType !== this.AttributeType.dynamic || attrType !== this.AttributeType.actuator) && value) {
                 I.fillField(locate('input').withAttr({name: 'static_value'}), Util.toString(value));
             }
         });
@@ -177,7 +177,7 @@ module.exports = {
             }
             I.seeSelectOptionByNameAndValue('type', attrType);
             I.seeSelectOptionByNameAndValue('value_type', attrValueType);
-            if (attrType !== this.AttributeType.dynamic && value) {
+            if ((attrType !== this.AttributeType.dynamic || attrType !== this.AttributeType.actuator) && value) {
                 I.seeInputByNameAndValue('static_value', Util.toString(value));
             }
 
