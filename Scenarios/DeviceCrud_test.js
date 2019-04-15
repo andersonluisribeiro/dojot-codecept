@@ -256,10 +256,6 @@ Scenario('Checking after change template', async (I, Device) => {
 
 Scenario('Updating a device - specialized', async (I, Device) => {
 
-/*   template1.attrsStatics[0].metadata[2].static_value = 'value3';
-    template1.attrsStatics[2].static_value = 'ABCD';
-    template1.attrsConfig[0].static_value = 'mqttq';*/
-
     template1.attrsStatics[0].metadata[2].static_value = 'value2';
     template1.attrsStatics[2].static_value = 'ABC';
     template1.attrsConfig[0].static_value = 'mqtt3';
