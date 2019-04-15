@@ -266,7 +266,6 @@ Scenario('Updating a device - specialized', async (I, Device) => {
     Device.change64QtyToShowPagination();
     Device.clickCardByDeviceName('Name of device change');
     Device.fillNameDevice('Name of device');
-    pause();
     Device.clickSave();
     Device.seeHasUpdated();
 });
