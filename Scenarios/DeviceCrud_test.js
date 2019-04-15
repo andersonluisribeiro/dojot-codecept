@@ -125,6 +125,11 @@ function checkingAttrTemplate(Device, template) {
     Device.clickToManageAttributes(Device.AttributeTypes.static);
     Device.seeAllStatic(template.attrsStatics);
     Device.clickDiscard();
+
+
+    Device.clickToManageAttributes(Device.AttributeTypes.actuator);
+    Device.seeAllDynamics(template.attrsActuators);
+    Device.clickDiscard();
 }
 
 Scenario('Creating a device', async (I, Device) => {
@@ -270,11 +275,16 @@ Scenario('Updating a device - specialized', async (I, Device) => {
     Device.seeHasUpdated();
 });
 
+
+
 Scenario('Checking a after specialized change  ', async (I, Device) => {
+
+    template1.attrsConfig[0].static_value = 'mqtt';
+    await I.updateTemplate(template1.json, template1.id);
 
     const templateJustToCheck = JSON.parse(JSON.stringify(template1));
     templateJustToCheck.attrsStatics[0].static_value = 'change-ABCDEFG-86';
-    templateJustToCheck.attrsConfig[0].static_value = 'mqtt';
+    templateJustToCheck.attrsConfig[0].static_value = 'mqtt3';
     templateJustToCheck.attrsStatics[0].metadata[0].static_value = 10;
     templateJustToCheck.attrsDynamics[1].metadata[0].static_value = '11';
     templateJustToCheck.attrsStatics[0].metadata[2].static_value = 'value2';
