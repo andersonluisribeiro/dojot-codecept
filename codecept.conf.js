@@ -51,7 +51,7 @@ exports.config = {
                 admin: {
                     login: (I) => {
                         I.amOnPage(env.dojot_host);
-                        I.clearLocalStorage();
+                        I.setEnglishLanghage();
                         I.refreshPage();
                         I.wait(3);
                         I.see('Sign in');
