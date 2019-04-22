@@ -48,12 +48,12 @@ module.exports = () => {
 
         async clearDatabase(){
             return await this.postJSON('import', {
-                "devices":[],"templates":[],"flows":[]
+                "devices":[],"templates":[],"flows":[],"flowRemoteNodes":[]
             });
         },
 
-        clearLocalStorage(){
-            this.executeScript(() => { return localStorage.clear()});
+        async setEnglishLanghage(){
+            return await this.executeScript(() => { return localStorage.setItem("i18nextLng", "en")});
         },
 
         async sendMQTTMessage(deviceId, message){
