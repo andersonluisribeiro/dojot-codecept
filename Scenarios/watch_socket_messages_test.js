@@ -34,6 +34,7 @@ Scenario('Watching a simple message', async (I, Device) => {
 
     Device.clickDetailsDevice(deviceId);
     Device.selectAttr('text');
+    I.wait(5);
     Device.shouldSeeMessage('my string');
 
 });

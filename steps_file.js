@@ -52,6 +52,10 @@ module.exports = () => {
             });
         },
 
+        clearLocalStorage(){
+            this.executeScript(() => { return localStorage.clear()});
+        },
+
         async sendMQTTMessage(deviceId, message){
             let client  = await mqtt.connect(env.mqtt_host);
             await client.publish(`/admin/${deviceId}/attrs`, message);
