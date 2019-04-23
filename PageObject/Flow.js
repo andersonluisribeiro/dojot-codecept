@@ -50,7 +50,7 @@ module.exports = {
     },
 
     setFlowName(value){
-        I.fillField('Flow name', value);
+        I.fillField('#fld_flowname', value);
     },
 
     addDeviceInput(){
