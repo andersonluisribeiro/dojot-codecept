@@ -70,7 +70,7 @@ module.exports = {
     _seeMetas: function (attr) {
         if (attr.metadata && attr.metadata.length > 0) {
             I.seeElement(locate('.attr-card-input-wrapper div').withText(attr.label));
-            I.click(locate('.attr-card-metadata-arrow').withAttr({
+            I.click(locate('.attr-card-metadata-header').withAttr({
                 id: 'meta_show:' + attr.label,
                 role: 'button'
             }));
@@ -112,7 +112,7 @@ module.exports = {
     },
 
     _fillMetaValue: function (labelAttr, labelMeta, newValueMeta) {
-        I.click(locate('.attr-card-metadata-arrow').withAttr({
+        I.click(locate('.attr-card-metadata-header').withAttr({
             id: 'meta_show:' + labelAttr,
             role: 'button'
         }));

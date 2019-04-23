@@ -82,8 +82,8 @@ module.exports = {
     },
 
     clickCardByNameTemplate: function (nameTemplate) {
-        I.waitForElement(locate('.template-card  label').withAttr({title: nameTemplate}));
-        I.click(locate('.template-card  label').withAttr({title: nameTemplate}));
+        I.waitForElement(locate('div').withAttr({title: nameTemplate}));
+        I.click(locate('div').withAttr({title: nameTemplate}));
     },
 
     _fillAttrForm: function (fieldValue, attrType, attrValueType, value) {
