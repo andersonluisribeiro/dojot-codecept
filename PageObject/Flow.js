@@ -99,7 +99,7 @@ module.exports = {
     },
 
     clickOnDone(){
-        I.click("Done");
+        I.click("#node-dialog-ok");
     },
 
     clickOnSwitch(){
